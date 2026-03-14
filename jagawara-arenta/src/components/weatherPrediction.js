@@ -23,7 +23,7 @@ export default function Weather(){
                 setLoading(false);
             }
         };
-        fetcWeather();
+        fetchWeather();
     }, []);
 
     if(loading) return <div className="p-5 text-center">Memuat data cuaca real-time</div>
@@ -38,7 +38,7 @@ export default function Weather(){
             time: time,
             temp: hourlyTemp[index],
             humidity: hourlyHumidity[index]
-        })).filter(item => item.time.startsWith(selecetedDate));
+        })).filter(item => item.time.startsWith(selectedDate));
     };
 
     const selectedHourlyData = getHourlyData();
