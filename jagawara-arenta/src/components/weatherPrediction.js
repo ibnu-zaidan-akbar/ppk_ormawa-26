@@ -65,10 +65,10 @@ export default function Weather(){
     }
 
     return (
-        <div className="p-4 gap-12 w-full flex flex-col items-center justify-center">
-            <div className="p-4 w-full max-w-[1280px] bg-white mx-auto border-3 border-[#936440]/60 overflow-hidden">
-                <h2 className="text-[#0B592F] text-[40px] leading-tight font-bold">Prediksi Cuaca Desa Cipelah</h2>
-                <h3 className="text-[#936440] text-[20px] leading-tight font-bold mb-4 ">Click Hari untuk Detail Jam</h3>
+        <div className="gap-12 w-full flex flex-col items-center justify-center">
+            <div className="p-4 w-full max-w-[1230px] bg-white mx-auto border-3 border-[#936440]/60 overflow-hidden">
+                <h2 className="text-[#0B592F] text-[20px] xl:text-[40px] leading-tight font-bold">Prediksi Cuaca Desa Cipelah</h2>
+                <h3 className="text-[#936440] text-[12px] xl:text-[20px] leading-tight font-bold mb-4 ">Click Hari untuk Detail Jam</h3>
                 <div className="flex gap-4 -mx-5 px-4 border-y-3 border-[#936440]/60 py-4 overflow-y-hidden overflow-x-auto custom-scrollbar">
                     {weatherData.daily.time.map((date, index) => {
                         const maxTemp = weatherData.daily.temperature_2m_max[index];
@@ -81,18 +81,18 @@ export default function Weather(){
 
                         return (
                             <React.Fragment key={date}>
-                                <div key={date} onClick={() => setSelectedDate(date)} className={"shrink-0 flex flex-col min-w-[100px] p-11 -m-4 cursor-pointer transition-all text-center items-center " + (isSelected ? "bg-[#0B592F]/15 hover:bg-[#F0E7D7]" : "bg-white hover:bg-gray-50")}>
-                                    <p className="text-black text-2xl font-bold">{new Date(date).toLocaleDateString('id-ID', { weekday: 'long'})}</p>
-                                    <p className="text-[#936440] text-sm font-semibold">{new Date(date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short'})}</p>
-                                    <div className="m-4 w-15 h-15 relative items-center">
+                                <div key={date} onClick={() => setSelectedDate(date)} className={"shrink-0 flex flex-col xl:min-w-[100px] p-4 xl:p-10 -m-4 cursor-pointer transition-all text-center items-center " + (isSelected ? "bg-[#0B592F]/15 hover:bg-[#F0E7D7]" : "bg-white hover:bg-gray-50")}>
+                                    <p className="text-black text-[16px] xl:text-[24px] font-bold">{new Date(date).toLocaleDateString('id-ID', { weekday: 'long'})}</p>
+                                    <p className="text-[#936440] text-[12px] font-semibold">{new Date(date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short'})}</p>
+                                    <div className="m-4 w-10 h-10 xl:w-15 xl:h-15 relative items-center">
                                         <Image
                                             src={iconPath} alt={weatherCategory}
                                             fill className="object-contain"
                                             />
                                     </div>
-                                    <p className="text-[#936440] text-lg font-bold">{weatherCategory}</p>
-                                    <p className="text-black text-lg font-semibold">{maxTemp}°C</p>
-                                    <p className="text-[#936440] text-xs opacity-80">{minTemp}°C</p>
+                                    <p className="text-[#936440] text-[14px] xl:text-[18px] font-bold">{weatherCategory}</p>
+                                    <p className="text-black text-[14px] xl:text-[18px] font-semibold">{maxTemp}°C</p>
+                                    <p className="text-[#936440] text-[12px] opacity-80">{minTemp}°C</p>
                                 </div>
                                 {!isLastItem && (
                                     <div className="w-[2px] -my-[17px] bg-[#936440]/60 shrink-0 rounded-full"></div>
@@ -101,8 +101,8 @@ export default function Weather(){
                         );
                     })}
                 </div>
-                <div className="p-5">
-                    <h3 className="text-[#0B592F] text-[28px] font-bold mb-4">Cuaca {new Date(selectedDate).toLocaleDateString('id-ID', { weekday: 'long'})} {new Date(selectedDate).toLocaleDateString('id-ID', {day: 'numeric', month: 'long'})} per Jam</h3>
+                <div className="pt-3 xl:p-5">
+                    <h3 className="text-[#0B592F] text-[16px] xl:text-[32px] font-bold mb-4">Cuaca {new Date(selectedDate).toLocaleDateString('id-ID', { weekday: 'long'})} {new Date(selectedDate).toLocaleDateString('id-ID', {day: 'numeric', month: 'long'})} per Jam</h3>
                     <div className="flex gap-3 overflow-x-auto custom-scrollbar overflow-y-hidden pb-5">
                         {selectedHourlyData.map((data, index) => {
                         // {selectedHourlyData.filter((_, index) => index % 2 === 0).map((data, index) => {
@@ -110,16 +110,16 @@ export default function Weather(){
                             const hourlyCode = data.weather_code;
                             const iconPath = getWeatherIcon(hourlyCode);
                             return (
-                                <div key={index} className="shrink-0 min-w-[100px] bg-[#EAE2D5] p-5 rounded-xl shadow-lg text-center">
-                                    <p className="text-lg font-semibold text-gray-600">{hour}</p>
-                                    <div className="m-4 w-13 h-13 relative items-center">
+                                <div key={index} className="shrink-0 min-w-[90px] xl:min-w-[100px] bg-[#EAE2D5] p-3 xl:p-5 rounded-xl shadow-lg text-center">
+                                    <p className="text-[14px] xl:text-[18px] font-semibold text-gray-600">{hour}</p>
+                                    <div className="my-3 mx-4 xl:m-4 w-9 xl:w-13 h-9 xl:h-13 relative items-center">
                                         <Image
                                             src={iconPath} alt="weather category"
                                             fill className="object-contain"
                                             />
                                     </div>
-                                    <p className="text-md font-bold text-black my-1">{data.temp}°C</p>
-                                    <p className="text-xs text-blue-600">💧{data.humidity}%</p>
+                                    <p className="text-[10px] xl:text-[16px] font-bold text-black my-1">{data.temp}°C</p>
+                                    <p className="text-[12px] text-blue-600">💧{data.humidity}%</p>
                                 </div>
                             );
                         })}
