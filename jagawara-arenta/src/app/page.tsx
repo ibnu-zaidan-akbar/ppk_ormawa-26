@@ -17,7 +17,7 @@ export default function Home() {
         </div>
         <div className="w-10 h-10 lg:w-14 lg:h-14 relative items-center order-3 lg:order-2">
           <Image
-            src="/icon/cloudRain.svg" alt="icon"
+            src="/icon/CloudRain.svg" alt="icon"
             fill className="object-contain"
           />
         </div>
