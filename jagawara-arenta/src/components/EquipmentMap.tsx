@@ -20,9 +20,6 @@ export default function EquipmentMap() {
     return (
         <div className="w-full h-[400px] xl:h-[500px] z-0 relative overflow-hidden">
             <MapContainer center={mapCenter} zoom={18} maxZoom={21} scrollWheelZoom={false} touchZoom={true} className="w-full h-full z-0">
-                {/* real staelit isinya pohon */}
-                {/* <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" maxZoom={21} maxNativeZoom={18}/> */}
-                {/* kaya flat keliatan rumah nya */}
                 <TileLayer attribution='&copy; <a href="https://www.esri.com/">Esri</a>' url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" maxZoom={21} maxNativeZoom={18}/>
                 {devices.map((device) => (
                     <Marker key={device.id} position={device.location as [number, number]} icon={customIcon}>
