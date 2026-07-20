@@ -16,9 +16,9 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
   console.log('[firebase-messaging-sw.js] Pesan darurat diterima: ', payload);
 
-  const notificationTitle = payload.notification.title || 'Peringatan EWS';
+  const notificationTitle = payload.data.title || 'Peringatan EWS';
   const notificationOptions = {
-    body: payload.notification.body || 'Silakan cek aplikasi segera.',
+    body: payload.data.bodyMsg || 'Silakan cek aplikasi segera.',
     icon: '/icon.svg', 
     badge: '/icon.svg',
     vibrate: [2000, 500, 2000],
@@ -39,18 +39,22 @@ messaging.onBackgroundMessage((payload) => {
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   if (event.action === 'mute_siren') {
-      console.log('Warga menekan tombol Matikan Sirine');
+      console.log('Warga mematikan sirine dari luar');
   } else {
+      const alertLevel = event.notification.data.level || 'awas';
+      const targetUrl = '/?alert=' + alertLevel;
+
       event.waitUntil(
           clients.matchAll({ type: 'window' }).then((windowClients) => {
               for (let i = 0; i < windowClients.length; i++) {
                   let client = windowClients[i];
                   if (client.url.includes('/') && 'focus' in client) {
-                      return client.focus();
+                      // Jika web sudah terbuka, arahkan ke URL baru dan fokuskan
+                      return client.navigate(targetUrl).then(c => c.focus());
                   }
               }
               if (clients.openWindow) {
-                  return clients.openWindow('/');
+                  return clients.openWindow(targetUrl);
               }
           })
       );

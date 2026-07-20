@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Weather from "../components/weatherPrediction";
-import Notification from "../components/Notification";
+import NotificationManager from "../components/Notification";
 import dynamic from 'next/dynamic';
 
 const MapComponent = dynamic(() => import('../components/EquipmentMap'), { 
@@ -155,7 +155,7 @@ export default function Home() {
 
       </main>
       
-      <Notification/>
+      <NotificationManager/>
     </div>
   );
 }

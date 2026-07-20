@@ -1,9 +1,18 @@
 'use client'
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
+import { messaging, getToken, onMessage } from '../lib/firebase'
+import { createClient } from '@supabase/supabase-js';
+import { useSearchParams } from 'next/navigation';
 import AOS from "aos"
 import 'aos/dist/aos.css';
 
-export default function Notification() {
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+function NotificationLogic() {
+    const searchParams = useSearchParams();
+
     useEffect(() => {
             AOS.init({ duration: 700, once: true });
         }, []);
@@ -11,16 +20,20 @@ export default function Notification() {
     const [showSiaga, setShowSiaga] = useState(false);
     const [showToast, setShowToast] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [fcmToken, setFcmToken] = useState<string>('');
+    const [incomingData, setIncomingData] = useState<any>(null);
 
     const audioPlayer = useRef<HTMLAudioElement | null>(null);
 
-    const triggerNotification = (level: 'siaga' | 'waspada' | 'awas') => {
+    const triggerNotification = (level: 'siaga' | 'waspada' | 'awas', dataSensor?: any) => {
         if (audioPlayer.current) {
             audioPlayer.current.pause();
             audioPlayer.current.removeAttribute('src');
             audioPlayer.current.load();
             audioPlayer.current = null;
         }
+
+        if (dataSensor) setIncomingData(dataSensor);
 
         let audioPath = '';
         if (level === 'siaga') {
@@ -36,10 +49,7 @@ export default function Notification() {
 
         const newAudio = new Audio(audioPath);
         newAudio.loop = true;
-        newAudio.play().catch((err) => {
-            console.error(`Gagal memutar ${audioPath}. Penyebab:`, err);
-        });
-        
+        newAudio.play().catch((err) => console.error(`Gagal memutar audio:`, err));
         audioPlayer.current = newAudio;
     };
 
@@ -56,15 +66,109 @@ export default function Notification() {
         }
     };
 
+    useEffect(() => {
+        if (typeof window !== 'undefined' && messaging) {
+            const unsubscribe = onMessage(messaging, (payload) => {
+                console.log('Pesan diterima saat web terbuka:', payload);
+                const level = payload.data?.level as 'siaga' | 'waspada' | 'awas';
+                if (level) {
+                    triggerNotification(level, payload.data);
+                }
+            });
+            return () => unsubscribe();
+        }
+    }, []);
+
+    useEffect(() => {
+        const alertLevel = searchParams.get('alert') as 'siaga' | 'waspada' | 'awas';
+        if (alertLevel) {
+            console.log('Web dibuka dari klik notifikasi! Level:', alertLevel);
+            setTimeout(() => {
+                triggerNotification(alertLevel);
+            }, 500);
+        }
+    }, [searchParams]);
+
+    const requestPermission = async () => {
+        try {
+            const permission = await window.Notification.requestPermission();
+            
+            if (permission === 'granted') {
+                console.log('Izin diberikan! Sedang mengambil token...');
+                
+                if (messaging) {
+                    const token = await getToken(messaging, {
+                        vapidKey: 'BJlCuEzsuPopaWON9mQ5AokB8-vFyzIAnaq6k9dUoByIIDfH1-HKZ7UJa7QLa22y3RKY9eYT2SMv2mnwkJvlWJo' 
+                    });
+                    
+                    if (token) {
+                        console.log('Berhasil dapat Token:', token);
+                        setFcmToken(token);
+                        
+                        // ===== LOGIKA BARU: INSERT KE SUPABASE =====
+                        console.log('Menyimpan token ke database...');
+                        const { error } = await supabase
+                            .from('fcm_tokens')
+                            .insert([{ token: token }]);
+
+                        if (error) {
+                            if (error.code === '23505') {
+                                console.log('✅ Aman! Token HP ini sudah terdaftar di database.');
+                            } else {
+                                console.error('❌ Gagal menyimpan token:', error.message);
+                            }
+                        } else {
+                            console.log('✅ Sukses! Token baru berhasil ditambahkan ke database EWS.');
+                        }
+
+                    } else {
+                        console.log('Gagal mendapatkan token dari Google.');
+                    }
+                }
+            } else {
+                console.log('Warga menolak memberikan izin notifikasi.');
+            }
+        } catch (error) {
+            console.error('Terjadi kesalahan saat meminta token:', error);
+        }
+    };
+
+    const testTriggerBackend = (level: string) => {
+        console.log("Menyuruh balai desa menembak massal... Cepat minimize browser!");
+        setTimeout(async () => {
+            try {
+                const res = await fetch('/api/trigger-alarm', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        level: level 
+                    })
+                });
+                const data = await res.json();
+                console.log("Respon Tembakan Massal:", data);
+            } catch (error) {
+                console.error("Gagal memanggil API", error);
+            }
+        }, 5000); 
+    };
+
     return (
         <div className="p-10 h-[500px] bg-[#f4f1ea] flex flex-col items-center justify-center font-sans">
             <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200 text-center mb-10 max-w-md w-full">
                 <h2 className="text-xl font-bold text-gray-800 mb-4">Simulasi Trigger Sensor</h2>
-                <p className="text-sm text-gray-500 mb-6">Klik tombol di bawah untuk melihat kemunculan UI Notifikasi PWA.</p>
+                <button onClick={requestPermission} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-full transition-colors mb-4">
+                    Aktifkan Notifikasi Darurat
+                </button>
                 <div className="flex flex-col gap-3">
                     <button onClick={() => triggerNotification('siaga')} className="w-full py-3 bg-yellow-500 text-white rounded-lg font-bold shadow hover:bg-yellow-600 transition-colors cursor-pointer">Trigger SIAGA (Slide-in Orange)</button>
                     <button onClick={() => triggerNotification('waspada')} className="w-full py-3 bg-orange-500 text-white rounded-lg font-bold shadow hover:bg-orange-600 transition-colors">Trigger WASPADA (Slide-in)</button>
                     <button onClick={() => triggerNotification('awas')} className="w-full py-3 bg-red-600 text-white rounded-lg font-bold shadow hover:bg-red-700 transition-colors">Trigger AWAS (Full Screen)</button>
+
+                    {fcmToken && (
+                        <button onClick={() => testTriggerBackend('awas')} className="w-full mt-4 bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 px-4 rounded-lg shadow-lg border-2 border-purple-900">
+                            🚀 UJI COBA TEMBAK NOTIFIKASI MASSAL
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -101,13 +205,19 @@ export default function Notification() {
                             <p className="font-bold text-gray-700 mb-2 border-b pb-2">Detail Data Masuk:</p>
                             <ul className="space-y-2 text-gray-600">
                                 <li className="flex justify-between">
-                                    <span>Titik Lokasi:</span> <span className="font-bold text-gray-900">Tebing A (Node-01)</span>
+                                    <span>Titik Lokasi:</span> <span className="font-bold text-gray-900">Node Tebing Desa</span>
                                 </li>
                                 <li className="flex justify-between">
-                                    <span>Kemiringan (Tilt):</span> <span className="font-bold text-red-600 animate-pulse">15 Derajat</span>
+                                    <span>Kemiringan (Tilt):</span> 
+                                    <span className="font-bold text-red-600 animate-pulse">
+                                        {incomingData?.tilt || 'Ekstrem'} Derajat
+                                    </span>
                                 </li>
                                 <li className="flex justify-between">
-                                    <span>Curah Hujan:</span> <span className="font-bold text-red-600">120 mm/jam</span>
+                                    <span>Getaran:</span> 
+                                    <span className="font-bold text-red-600">
+                                        {incomingData?.vibration || 'Tinggi'} Hz
+                                    </span>
                                 </li>
                             </ul>
                         </div>
@@ -118,6 +228,42 @@ export default function Notification() {
                     </div>
                 </div>
             )}
+
+            {/* <div className="p-6 bg-white rounded-xl shadow-md max-w-md mx-auto mt-10 text-center">
+                <h2 className="text-xl font-bold mb-4">Pengaturan Notifikasi</h2>
+                <button 
+                    onClick={requestPermission}
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-full transition-colors"
+                    >
+                    Aktifkan Notifikasi Darurat
+                </button>
+                
+                {fcmToken && (
+                    <div className="mt-4 text-left">
+                        <p className="text-sm font-bold text-green-600">Token FCM Berhasil Didapat!</p>
+                        <textarea 
+                            readOnly 
+                            value={fcmToken} 
+                            className="w-full text-xs text-gray-500 bg-gray-100 p-2 mt-2 rounded border"
+                            rows={4}
+                            />
+                        <button 
+                            onClick={() => testTriggerBackend('awas')}
+                            className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg shadow-lg border-2 border-red-800"
+                            >
+                            🚀 UJI COBA TEMBAK NOTIFIKASI OS (AWAS)
+                        </button>
+                    </div>
+                )}
+            </div> */}
         </div>
+    );
+}
+
+export default function NotificationManager() {
+    return (
+        <Suspense fallback={<div className="p-10 text-center font-bold">Memuat Sistem Notifikasi...</div>}>
+            <NotificationLogic />
+        </Suspense>
     );
 }
