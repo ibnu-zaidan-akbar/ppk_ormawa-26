@@ -20,7 +20,25 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { level } = body;
+        let level = '';
+        let dataSensor = null;
+        if (body.record) {
+            level = body.record.status;
+            dataSensor = {
+                kemiringan: body.record.kemiringan,
+                getaran: body.record.getaran,
+                kelembapan: body.record.kelembapan,
+                curah_hujan: body.record.curah_hujan
+            };
+        } else {
+            level = body.level;
+            dataSensor = body;
+        }
+
+        if (level === 'aman' || !level) {
+            return NextResponse.json({ message: 'Aman terkendali. Tidak ada notif dikirim.' });
+        }
+
         const { data: tokensData, error } = await supabase
             .from('fcm_tokens')
             .select('token');
@@ -50,6 +68,10 @@ export async function POST(request: Request) {
                 level: level,
                 title: title,
                 bodyMsg: bodyMsg,
+                kemiringan: String(dataSensor?.kemiringan || '0'), 
+                getaran: String(dataSensor?.getaran || '0'),
+                kelembapan: String(dataSensor?.kelembapan || '0'),
+                curah_hujan: String(dataSensor?.curah_hujan || '0')
             }
         };
 

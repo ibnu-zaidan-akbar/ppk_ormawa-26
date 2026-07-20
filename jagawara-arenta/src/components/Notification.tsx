@@ -205,19 +205,20 @@ function NotificationLogic() {
                             <p className="font-bold text-gray-700 mb-2 border-b pb-2">Detail Data Masuk:</p>
                             <ul className="space-y-2 text-gray-600">
                                 <li className="flex justify-between">
-                                    <span>Titik Lokasi:</span> <span className="font-bold text-gray-900">Node Tebing Desa</span>
-                                </li>
-                                <li className="flex justify-between">
-                                    <span>Kemiringan (Tilt):</span> 
-                                    <span className="font-bold text-red-600 animate-pulse">
-                                        {incomingData?.tilt || 'Ekstrem'} Derajat
-                                    </span>
+                                    <span>Kemiringan (Tilt):</span>
+                                    <span className="font-bold text-red-600 animate-pulse">{incomingData?.kemiringan || '> 15'} Derajat</span>
                                 </li>
                                 <li className="flex justify-between">
                                     <span>Getaran:</span> 
-                                    <span className="font-bold text-red-600">
-                                        {incomingData?.vibration || 'Tinggi'} Hz
-                                    </span>
+                                    <span className="font-bold text-red-600">{incomingData?.getaran || 'Tinggi'} Hz</span>
+                                </li>
+                                <li className="flex justify-between">
+                                    <span>Curah Hujan:</span>
+                                    <span className="font-bold text-red-600">{incomingData?.curah_hujan || 'Tinggi'} mm/jam</span>
+                                </li>
+                                <li className="flex justify-between">
+                                    <span>Kelembapan Tanah:</span>
+                                    <span className="font-bold text-orange-600">{incomingData?.kelembapan || 'Basah'} %</span>
                                 </li>
                             </ul>
                         </div>
@@ -228,34 +229,6 @@ function NotificationLogic() {
                     </div>
                 </div>
             )}
-
-            {/* <div className="p-6 bg-white rounded-xl shadow-md max-w-md mx-auto mt-10 text-center">
-                <h2 className="text-xl font-bold mb-4">Pengaturan Notifikasi</h2>
-                <button 
-                    onClick={requestPermission}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-full transition-colors"
-                    >
-                    Aktifkan Notifikasi Darurat
-                </button>
-                
-                {fcmToken && (
-                    <div className="mt-4 text-left">
-                        <p className="text-sm font-bold text-green-600">Token FCM Berhasil Didapat!</p>
-                        <textarea 
-                            readOnly 
-                            value={fcmToken} 
-                            className="w-full text-xs text-gray-500 bg-gray-100 p-2 mt-2 rounded border"
-                            rows={4}
-                            />
-                        <button 
-                            onClick={() => testTriggerBackend('awas')}
-                            className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg shadow-lg border-2 border-red-800"
-                            >
-                            🚀 UJI COBA TEMBAK NOTIFIKASI OS (AWAS)
-                        </button>
-                    </div>
-                )}
-            </div> */}
         </div>
     );
 }
