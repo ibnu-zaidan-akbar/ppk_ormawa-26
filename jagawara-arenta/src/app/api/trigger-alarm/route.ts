@@ -62,25 +62,69 @@ export async function POST(request: Request) {
             bodyMsg = 'Anomali kelembapan dan getaran terdeteksi kecil di area pemantauan, hati-hati.';
         }
 
-        const message = {
-            tokens: registrationTokens,
-            data: {
-                level: level,
-                title: title,
-                bodyMsg: bodyMsg,
-                kemiringan: String(dataSensor?.kemiringan || '0'), 
-                getaran: String(dataSensor?.getaran || '0'),
-                kelembapan: String(dataSensor?.kelembapan || '0'),
-                curah_hujan: String(dataSensor?.curah_hujan || '0')
-            }
-        };
+        const BATCH_SIZE = 500;
+        const chunkedTokens = [];
+        for (let i = 0; i < registrationTokens.length; i += BATCH_SIZE) {
+            chunkedTokens.push(registrationTokens.slice(i, i + BATCH_SIZE));
+        }
 
-        const response = await getMessaging().sendEachForMulticast(message);        
-        console.log(`Berhasil kirim ke ${response.successCount} HP. Gagal: ${response.failureCount}`);
+        let totalSuccess = 0;
+        let totalFailed = 0;
+        const failedTokensToRemove: string[] = [];
+        for (const tokenBatch of chunkedTokens) {
+            const message = {
+                tokens: tokenBatch,
+                data: {
+                    level: level,
+                    title: title,
+                    bodyMsg: bodyMsg,
+                    kemiringan: String(dataSensor?.kemiringan || '0'), 
+                    getaran: String(dataSensor?.getaran || '0'),
+                    kelembapan: String(dataSensor?.kelembapan || '0'),
+                    curah_hujan: String(dataSensor?.curah_hujan || '0')
+                },
+                android: {
+                    priority: 'high' as const,
+                    ttl: 0
+                },
+                apns: {
+                    headers: {
+                        'apns-priority': '10'
+                    }
+                }
+            };
+
+            const response = await getMessaging().sendEachForMulticast(message);
+            totalSuccess += response.successCount;
+            totalFailed += response.failureCount;
+            if (response.failureCount > 0) {
+                response.responses.forEach((resp, idx) => {
+                    if (!resp.success) {
+                        const errorCode = resp.error?.code;
+                        if (errorCode === 'messaging/invalid-registration-token' ||
+                            errorCode === 'messaging/registration-token-not-registered') {
+                            failedTokensToRemove.push(tokenBatch[idx]);
+                        }
+                    }
+                });
+            }
+        }
+
+        if (failedTokensToRemove.length > 0) {
+            console.log(`Menghapus ${failedTokensToRemove.length} token tidak valid dari database...`);
+            await supabase
+                .from('fcm_tokens')
+                .delete()
+                .in('token', failedTokensToRemove);
+        }
+
+        console.log(`EWS Berhasil: ${totalSuccess} HP. Gagal: ${totalFailed}`);
+
         return NextResponse.json({ 
             success: true, 
-            sent: response.successCount,
-            failed: response.failureCount
+            sent: totalSuccess,
+            failed: totalFailed,
+            cleaned: failedTokensToRemove.length
         });
 
     } catch (error) {
