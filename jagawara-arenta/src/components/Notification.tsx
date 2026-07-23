@@ -67,9 +67,10 @@ function NotificationLogic() {
     };
 
     useEffect(() => {
-        if (typeof window !== 'undefined' && messaging) {
+        if (typeof window !== 'undefined' && messaging && fcmToken) {
+            console.log("Radar penangkap PWA di Foreground AKTIF!");
             const unsubscribe = onMessage(messaging, (payload) => {
-                console.log('Pesan diterima saat web terbuka:', payload);
+                console.log('🔥 BOOM! Pesan masuk saat PWA sedang dibuka:', payload);
                 const level = payload.data?.level as 'siaga' | 'waspada' | 'awas';
                 if (level) {
                     triggerNotification(level, payload.data);
@@ -77,7 +78,7 @@ function NotificationLogic() {
             });
             return () => unsubscribe();
         }
-    }, []);
+    }, [fcmToken]);
 
     useEffect(() => {
         const alertLevel = searchParams.get('alert') as 'siaga' | 'waspada' | 'awas';
