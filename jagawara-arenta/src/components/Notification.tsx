@@ -133,9 +133,9 @@ function NotificationLogic() {
         }
     };
 
-    const testTriggerBackend = (level: string) => {
+    const testTriggerBackend = async (level: string) => {
         console.log("Menyuruh balai desa menembak massal... Cepat minimize browser!");
-        setTimeout(async () => {
+        // setTimeout(async () => {
             try {
                 const res = await fetch('/api/trigger-alarm', {
                     method: 'POST',
@@ -149,7 +149,7 @@ function NotificationLogic() {
             } catch (error) {
                 console.error("Gagal memanggil API", error);
             }
-        }, 5000); 
+        // }, 5000); 
     };
 
     return (
