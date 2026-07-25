@@ -20,10 +20,10 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        let level = '';
+        let rawLevel = '';
         let dataSensor = null;
         if (body.record) {
-            level = body.record.status;
+            rawLevel = body.record.status;
             dataSensor = {
                 kemiringan: body.record.kemiringan,
                 getaran: body.record.getaran,
@@ -31,11 +31,12 @@ export async function POST(request: Request) {
                 curah_hujan: body.record.curah_hujan
             };
         } else {
-            level = body.level;
+            rawLevel = body.level;
             dataSensor = body;
         }
 
-        if (level === 'aman' || !level) {
+        const level = String(rawLevel || '').toUpperCase();
+        if (level === 'NORMAL' || !level) {
             return NextResponse.json({ message: 'Aman terkendali. Tidak ada notif dikirim.' });
         }
 
@@ -51,13 +52,13 @@ export async function POST(request: Request) {
         let title = 'Info EWS';
         let bodyMsg = 'Pesan sistem berjalan normal.';
         
-        if (level === 'awas') {
+        if (level === 'AWAS') {
             title = '🚨 AWAS BAHAYA TINGKAT TINGGI!';
             bodyMsg = 'Pergerakan tanah ekstrem. Jauhi lokasi tebing sekarang juga!';
-        } else if (level === 'waspada') {
+        } else if (level === 'WASPADA') {
             title = '⚠️ STATUS WASPADA';
             bodyMsg = 'Anomali kelembapan dan getaran terdeteksi di area pemantauan.';
-        } else if (level === 'siaga') {
+        } else if (level === 'SIAGA') {
             title = '⚠️ STATUS SIAGA';
             bodyMsg = 'Anomali kelembapan dan getaran terdeteksi kecil di area pemantauan, hati-hati.';
         }
