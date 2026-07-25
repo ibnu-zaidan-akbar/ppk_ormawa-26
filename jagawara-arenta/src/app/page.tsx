@@ -138,7 +138,7 @@ export default async function Home() {
         </section>
 
         <section className="w-full py-4">
-          <h2 className="py-4 text-[#0B592F] text-center text-[20px] xl:text-[36px] leading-tight font-bold">Riwayat Bencana Desa Cipelah</h2>
+          <h2 className="py-4 text-[#0B592F] text-center text-[16px] md:text-[20px] lg:text-[24px] xl:text-[32px] leading-tight font-bold">Riwayat Bencana Desa Cipelah</h2>
           {/* <div className="w-full mx-auto bg-white/50 p-6 rounded-xl border-2 border-[#936440]/60 shadow-lg"> */}
             {beritaData && beritaData.length > 0 ? (
               <BeritaSlider beritaData={beritaData} />
