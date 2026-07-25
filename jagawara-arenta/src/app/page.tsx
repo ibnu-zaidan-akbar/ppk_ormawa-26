@@ -1,13 +1,11 @@
-"use client";
 import Image from "next/image";
 import Weather from "../components/weatherPrediction";
 import NotificationManager from "../components/Notification";
-import dynamic from 'next/dynamic';
 
-const MapComponent = dynamic(() => import('../components/EquipmentMap'), { 
-    ssr: false,
-    loading: () => <div className="w-full h-[400px] bg-gray-200 animate-pulse rounded-xl flex items-center justify-center">Memuat Peta...</div>
-});
+import { client } from "@/src/sanity/lib/client";
+import { urlFor } from "@/src/sanity/lib/image";
+import BeritaSlider from "@/src/components/BeritaSlider";
+import MapWrapper from "../components/WrapperMap";
 
 const status = [
     {id: 1, name: "Normal", color: "bg-[#8CA70A]"},
@@ -54,8 +52,6 @@ export default function Home() {
       </div>
 
       <main className="max-w-[1480px] mx-auto px-4 md:px-10 xl:px-8 mt-8 space-y-8">
-        
-        {/* BAGIAN 1: PREDIKSI CUACA (Dari Komponen Aslimu) */}
         <section className="w-full drop-shadow-md">
             <Weather/>
         </section>
@@ -80,7 +76,7 @@ export default function Home() {
                     </div>
                 </div>
                 <div className="flex-1 min-h-[350px]">
-                    <MapComponent />
+                    <MapWrapper />
                 </div>
             </div>
 
@@ -131,27 +127,6 @@ export default function Home() {
 
         </section>
 
-        {/* BAGIAN 3: BERITA BENCANA (Data Dummy) */}
-        <section className="w-full mt-12 bg-white/50 p-6 rounded-xl border-2 border-[#936440]/30 shadow-sm">
-          <h2 className="text-[24px] font-bold text-[#0B592F] mb-6 border-b-2 border-[#0B592F] inline-block pb-1">Berita Bencana Terbaru</h2>
-          <div className="space-y-8">
-            {newsHistory.map((news) => (
-              <div key={news.id} className="flex flex-col md:flex-row gap-6 items-start">
-                <div className="w-full md:w-[350px] h-[200px] relative shrink-0 rounded-lg overflow-hidden border-2 border-[#936440]/20 shadow-md">
-                    <Image 
-                        src={news.img} 
-                        alt="Berita Bencana" 
-                        fill 
-                        className="object-cover hover:scale-105 transition-transform duration-500"
-                    />
-                </div>
-                <p className="text-[15px] text-gray-700 leading-relaxed text-justify flex-1 font-medium">
-                  {news.text}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
 
       </main>
       
