@@ -9,15 +9,20 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@sanity/image-url": "^2.1.1",
+    "@sanity/vision": "^5.31.1",
     "@supabase/supabase-js": "^2.110.7",
     "aos": "^2.3.4",
     "firebase": "^12.16.0",
     "firebase-admin": "^14.2.0",
     "leaflet": "^1.9.4",
     "next": "16.1.6",
+    "next-sanity": "^13.2.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "react-leaflet": "^5.0.0"
+    "react-leaflet": "^5.0.0",
+    "sanity": "^5.31.1",
+    "styled-components": "^6.4.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

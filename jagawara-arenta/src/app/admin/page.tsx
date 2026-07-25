@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 // DAFTAR EMAIL YANG DIIZINKAN (Whitelist)
 // Nanti kamu bisa tambah email relawan desa di sini
 const ALLOWED_EMAILS = [
-  "admin@desa.com", 
-  "kamu@gmail.com"
+  "jagawara.arenta@gmail.com", 
+  "akbaribnu031@gmail.com"
 ];
 
 export default function AdminDashboard() {
