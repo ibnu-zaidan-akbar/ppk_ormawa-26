@@ -33,7 +33,17 @@ const newsHistory = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const beritaQuery = `*[_type == "berita"] | order(_createdAt asc)`;
+  const rawBeritaData = await client.fetch(beritaQuery, {}, { next: { revalidate: 60 } });
+  const beritaData = rawBeritaData.map((item: any) => ({
+      id: item._id,
+      judul: item.judul,
+      tahun: item.tahun,
+      deskripsi: item.deskripsi,
+      cover_foto: item.galeri_foto && item.galeri_foto.length > 0 ? urlFor(item.galeri_foto[0]).url() : null
+  }));
+
   return (
     <div className="bg-[#f4f1ea] min-h-screen pb-16 font-sans">
       
@@ -127,6 +137,20 @@ export default function Home() {
 
         </section>
 
+        <section className="w-full py-4">
+          <h2 className="py-4 text-[#0B592F] text-center text-[20px] xl:text-[36px] leading-tight font-bold">Riwayat Bencana Desa Cipelah</h2>
+          <div className="w-fit mx-auto bg-white/50 p-6 rounded-xl border-2 border-[#936440]/60 shadow-lg">
+            {beritaData && beritaData.length > 0 ? (
+              <BeritaSlider beritaData={beritaData} />
+            ) : (
+              <div className="w-fit flex flex-col items-center justify-center mx-auto py-16 px-4 bg-gray-50/50 rounded-2xl border-2 border-dashed border-gray-300">
+                <div className="text-5xl mb-4 grayscale opacity-50">📰</div>
+                <h3 className="text-[#936440] text-[12px] xl:text-[20px] leading-tight font-bold mb-1">Belum Ada Catatan</h3>
+                <p className="text-[#936440] text-[8px] xl:text-[14px] text-center max-w-md">Syukurlah, saat ini belum ada riwayat bencana atau pergerakan tanah yang tercatat di Desa Cipelah.</p>
+              </div>
+            )}
+          </div>
+        </section>
 
       </main>
       
