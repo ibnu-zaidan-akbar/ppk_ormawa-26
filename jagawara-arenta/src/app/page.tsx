@@ -61,7 +61,7 @@ export default async function Home() {
         </div>
       </div>
 
-      <main className="max-w-[1480px] mx-auto px-4 md:px-10 xl:px-8 mt-8 space-y-8">
+      <main className="max-w-[1480px] mx-auto px-6 md:px-10 xl:px-8 mt-8 space-y-8">
         <section className="w-full drop-shadow-md">
             <Weather/>
         </section>
@@ -139,7 +139,7 @@ export default async function Home() {
 
         <section className="w-full py-4">
           <h2 className="py-4 text-[#0B592F] text-center text-[20px] xl:text-[36px] leading-tight font-bold">Riwayat Bencana Desa Cipelah</h2>
-          <div className="w-fit mx-auto bg-white/50 p-6 rounded-xl border-2 border-[#936440]/60 shadow-lg">
+          {/* <div className="w-full mx-auto bg-white/50 p-6 rounded-xl border-2 border-[#936440]/60 shadow-lg"> */}
             {beritaData && beritaData.length > 0 ? (
               <BeritaSlider beritaData={beritaData} />
             ) : (
@@ -149,7 +149,7 @@ export default async function Home() {
                 <p className="text-[#936440] text-[8px] xl:text-[14px] text-center max-w-md">Syukurlah, saat ini belum ada riwayat bencana atau pergerakan tanah yang tercatat di Desa Cipelah.</p>
               </div>
             )}
-          </div>
+          {/* </div> */}
         </section>
 
       </main>

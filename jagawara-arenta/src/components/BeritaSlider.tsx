@@ -2,6 +2,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay, Navigation } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
@@ -13,70 +14,43 @@ export default function BeritaSlider({ beritaData }: { beritaData: any[] }) {
   const swiperRef = useRef<SwiperType | null>(null);
 
   return (
-    <div className="w-full flex flex-col items-center relative">
-      <div className="flex items-center justify-between w-full group relative">
-        
+    <div className="w-full flex flex-col items-center">
+      <div className="flex items-center justify-between w-full max-w-md md:max-w-3xl xl:max-w-5xl mx-auto md:gap-6">
         {/* Tombol Kiri */}
-        <button 
-          onClick={() => swiperRef.current?.slidePrev()}
-          className="absolute left-0 z-20 transition-all duration-300 hover:scale-110 active:scale-90 animate-nudge-left cursor-pointer hidden md:block"
-        >
-          <svg viewBox="0 0 24 24" className="w-12 h-12 lg:w-20 lg:h-20 xl:w-[100px] xl:h-[100px]">
-            <path d="M19 18l-7-6 7-6v12z" fill="#9CA3AF" fillOpacity="0.6" className="transition-colors hover:fill-white" />
-            <path d="M11 18l-7-6 7-6v12z" fill="white" />
+        <button onClick={() => swiperRef.current?.slidePrev()} className="transition-all duration-300 hover:scale-110 active:scale-90 animate-nudge-left cursor-pointer hidden md:block">
+          <svg viewBox="0 0 24 24" className="w-12 h-12 lg:w-20 lg:h-20 xl:w-24 xl:h-24 transition-colors hover:opacity-80">
+            <path d="M19 18l-7-6 7-6v12z" fill="#936440" />
+            <path d="M11 18l-7-6 7-6v12z" fill="#5F6282" />
           </svg>
         </button>
 
         {/* Kontainer Swiper Utama */}
-        <div className="flex-1 mx-2 md:mx-16 relative rounded-2xl md:rounded-[3rem] overflow-hidden shadow-2xl bg-gray-900 h-[400px] md:h-[550px]">
-          <Swiper
-            modules={[Pagination, Autoplay, Navigation]}
-            pagination={{ clickable: true }}
-            autoplay={{ delay: 5000 }}
-            onSwiper={(swiper) => (swiperRef.current = swiper)}
-            className="w-full h-full"
+        <div className="flex-1 min-w-0 w-full bg-white border-[3px] border-[#936440] rounded-lg overflow-hidden">
+          <Swiper modules={[Pagination, Autoplay, Navigation]} pagination={{ clickable: true }} className="w-full"
+                  autoplay={{ delay: 5000, disableOnInteraction: false }} onSwiper={(swiper) => (swiperRef.current = swiper)}
           >
             {beritaData.map((item, index) => (
-              <SwiperSlide key={item.id} className="relative w-full h-full">
-                {/* Background Gambar (Diambil 1 foto saja dari cover_foto) */}
-                {item.cover_foto && (
-                  <Image 
-                    src={item.cover_foto} 
-                    alt={item.judul} 
-                    fill 
-                    sizes="(max-width: 640px) 100vw, 1200px"
-                    className="object-cover opacity-50"
-                    priority={index === 0}
-                  />
-                )}
-                
-                {/* Konten Teks di Atas Gambar */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 z-10">
-                  <h3 className="text-2xl md:text-4xl font-black mb-4 text-white uppercase tracking-widest drop-shadow-lg">
-                    {item.judul}
-                  </h3>
-                  <p className="text-sm md:text-lg text-gray-200 leading-relaxed max-w-3xl line-clamp-3 mb-6 drop-shadow-md">
-                    {item.deskripsi}
-                  </p>
-                  
-                  {/* Link menuju halaman full histori */}
-                  <Link href="/histori" className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition-transform hover:scale-105 active:scale-95 shadow-lg">
-                    Baca Histori Selengkapnya
-                  </Link>
+              <SwiperSlide key={item.id} className="w-full h-auto">
+                <div className="flex flex-col w-full h-full">
+                  <div className="relative w-full h-52 md:h-100 border-y-2 border-[#936440]">
+                    <Image src={item.cover_foto} alt={item.judul} className="object-cover" fill sizes="(max-width: 768px) 100vw, 800px" priority={index === 0}/>
+                  </div>
+                  <p className="p-2 text-[20px] md:text-[24px] justify-between font-bold text-[#936440] text-center leading-snug line-clamp-6">{item.judul}</p>
+                  <p className="px-4 text-[14px] md:text-[16px] justify-between font-semibold text-black text-justify leading-snug line-clamp-6">{item.deskripsi}</p>
                 </div>
               </SwiperSlide>
             ))}
           </Swiper>
+          <div className="text-right p-4">
+            <Link href="/histori" className="inline-block text-xs md:text-sm text-[#936440] hover:text-[#7a5132]">Baca Histori Lengkap &rarr;</Link>
+          </div>
         </div>
 
         {/* Tombol Kanan */}
-        <button 
-          onClick={() => swiperRef.current?.slideNext()}
-          className="absolute right-0 z-20 transition-all duration-300 hover:scale-110 active:scale-90 animate-nudge-right cursor-pointer hidden md:block"
-        >
-          <svg viewBox="0 0 24 24" className="w-12 h-12 lg:w-20 lg:h-20 xl:w-[100px] xl:h-[100px]">
-            <path d="M5 6l7 6-7 6V6z" fill="#9CA3AF" fillOpacity="0.6" className="transition-colors hover:fill-white" />
-            <path d="M13 6l7 6-7 6V6z" fill="white" />
+        <button onClick={() => swiperRef.current?.slideNext()} className="transition-all duration-300 hover:scale-110 active:scale-90 animate-nudge-right cursor-pointer hidden md:block">
+          <svg viewBox="0 0 24 24" className="w-12 h-12 lg:w-20 lg:h-20 xl:w-24 xl:h-24 transition-colors hover:opacity-80">
+            <path d="M5 6l7 6-7 6V6z" fill="#936440" className="transition-colors hover:fill-white" />
+            <path d="M13 6l7 6-7 6V6z" fill="#5F6282" />
           </svg>
         </button>
       </div>
