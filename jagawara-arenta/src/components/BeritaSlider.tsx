@@ -17,7 +17,7 @@ export default function BeritaSlider({ beritaData }: { beritaData: any[] }) {
     <div className="w-full flex flex-col items-center">
       <div className="flex items-center justify-between w-full max-w-md md:max-w-3xl xl:max-w-5xl mx-auto md:gap-6">
         {/* Tombol Kiri */}
-        <button onClick={() => swiperRef.current?.slidePrev()} className="transition-all duration-300 hover:scale-110 active:scale-90 animate-nudge-left cursor-pointer hidden md:block">
+        <button onClick={() => swiperRef.current?.slidePrev()} className="transition-all duration-300 hover:scale-110 active:scale-90 animate-nudge-left cursor-pointer">
           <svg viewBox="0 0 24 24" className="w-12 h-12 lg:w-20 lg:h-20 xl:w-24 xl:h-24 transition-colors hover:opacity-80">
             <path d="M19 18l-7-6 7-6v12z" fill="#936440" />
             <path d="M11 18l-7-6 7-6v12z" fill="#5F6282" />
@@ -47,7 +47,7 @@ export default function BeritaSlider({ beritaData }: { beritaData: any[] }) {
         </div>
 
         {/* Tombol Kanan */}
-        <button onClick={() => swiperRef.current?.slideNext()} className="transition-all duration-300 hover:scale-110 active:scale-90 animate-nudge-right cursor-pointer hidden md:block">
+        <button onClick={() => swiperRef.current?.slideNext()} className="transition-all duration-300 hover:scale-110 active:scale-90 animate-nudge-right cursor-pointer">
           <svg viewBox="0 0 24 24" className="w-12 h-12 lg:w-20 lg:h-20 xl:w-24 xl:h-24 transition-colors hover:opacity-80">
             <path d="M5 6l7 6-7 6V6z" fill="#936440" className="transition-colors hover:fill-white" />
             <path d="M13 6l7 6-7 6V6z" fill="#5F6282" />
