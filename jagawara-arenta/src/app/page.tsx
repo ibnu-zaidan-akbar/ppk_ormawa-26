@@ -139,17 +139,15 @@ export default async function Home() {
 
         <section className="w-full py-4">
           <h2 className="py-4 text-[#0B592F] text-center text-[16px] md:text-[20px] lg:text-[24px] xl:text-[32px] leading-tight font-bold">Riwayat Bencana Desa Cipelah</h2>
-          {/* <div className="w-full mx-auto bg-white/50 p-6 rounded-xl border-2 border-[#936440]/60 shadow-lg"> */}
-            {beritaData && beritaData.length > 0 ? (
-              <BeritaSlider beritaData={beritaData} />
-            ) : (
-              <div className="w-fit flex flex-col items-center justify-center mx-auto py-16 px-4 bg-gray-50/50 rounded-2xl border-2 border-dashed border-gray-300">
-                <div className="text-5xl mb-4 grayscale opacity-50">📰</div>
-                <h3 className="text-[#936440] text-[12px] xl:text-[20px] leading-tight font-bold mb-1">Belum Ada Catatan</h3>
-                <p className="text-[#936440] text-[8px] xl:text-[14px] text-center max-w-md">Syukurlah, saat ini belum ada riwayat bencana atau pergerakan tanah yang tercatat di Desa Cipelah.</p>
-              </div>
-            )}
-          {/* </div> */}
+          {beritaData && beritaData.length > 0 ? (
+            <BeritaSlider beritaData={beritaData} />
+          ) : (
+            <div className="w-fit flex flex-col items-center justify-center mx-auto py-16 px-4 bg-gray-50/50 rounded-2xl border-2 border-dashed border-gray-300">
+              <div className="text-5xl mb-4 grayscale opacity-50">📰</div>
+              <h3 className="text-[#936440] text-[12px] xl:text-[20px] leading-tight font-bold mb-1">Belum Ada Catatan</h3>
+              <p className="text-[#936440] text-[8px] xl:text-[14px] text-center max-w-md">Syukurlah, saat ini belum ada riwayat bencana atau pergerakan tanah yang tercatat di Desa Cipelah.</p>
+            </div>
+          )}
         </section>
 
       </main>
