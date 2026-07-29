@@ -61,7 +61,7 @@ export default async function Home() {
         </div>
         <div className="flex flex-col justify-center text-center lg:text-left leading-tight order-2 lg:order-3">
           <h1 className="text-[#0B592F] text-[20px] lg:text-[28px] font-bold tracking-tight">JAGAWARA ARENTA</h1>
-          <h3 className="text-[#936440] text-[12px] lg:text-[14px] font-semibold">Weather & Soil Sensor Dashboard</h3>
+          <h3 className="text-[#936440] text-[12px] lg:text-[14px] font-semibold">Dashboard Monitoring Cuaca dan Lingkungan</h3>
         </div>
         <div className="w-10 h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 relative items-center order-3 lg:order-2">
           <Image src="/icon/CloudRain.svg" alt="icon" fill className="object-contain" />
