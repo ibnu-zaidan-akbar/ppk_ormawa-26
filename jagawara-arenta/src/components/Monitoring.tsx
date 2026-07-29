@@ -78,9 +78,9 @@ export default function Monitoring(){
                                 <th className="py-4 px-4 font-bold">Getaran</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-[#936440]/30">
+                        <tbody className="divide-y divide-[#936440]/10">
                             {sensorData.map((data, index) => (
-                            <tr key={index} onClick={() => handleKlikBaris(data.lat, data.lng)} className="hover:bg-orange-50/50 transition-colors">
+                            <tr key={index} onClick={() => handleKlikBaris(data.lat, data.lng)} className="hover:bg-orange-100/60 transition-colors">
                                 <td className="py-4 px-4 font-bold text-[#0B592F]">{data.station}</td>
                                 <td className="py-4 px-4 text-gray-500 font-medium">{data.id}</td>
                                 <td className="py-4 px-4 text-center">
