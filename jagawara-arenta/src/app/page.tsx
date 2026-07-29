@@ -5,7 +5,7 @@ import NotificationManager from "../components/Notification";
 import { client } from "@/src/sanity/lib/client";
 import { urlFor } from "@/src/sanity/lib/image";
 import BeritaSlider from "@/src/components/BeritaSlider";
-import MapWrapper from "../components/WrapperMap";
+import Monitoring from "@/src/components/Monitoring";
 
 const status = [
     {id: 1, name: "NORMAL", color: "bg-[#8CA70A]"},
@@ -72,80 +72,7 @@ export default async function Home() {
         <section className="w-full drop-shadow-md">
             <Weather/>
         </section>
-
-        <section className="flex flex-col gap-8 w-full">
-            <div className="flex flex-col bg-white rounded-xl shadow-lg border-2 border-[#936440]/60 overflow-hidden h-full">
-                <div className="p-4 border-b border-[#936440]/20 bg-gray-50/50">
-                    <span className="text-[20px] font-bold text-[#0B592F] leading-tight block">Equipment Sensor Data</span>
-                    <span className="text-[14px] text-[#936440] leading-tight">Live monitoring data status</span>
-                </div>
-                
-                <div className="p-4 overflow-x-auto">
-                    <table className="w-full text-sm text-left whitespace-nowrap">
-                        <thead className="text-[14px] text-[#936440] border-b-2 border-[#936440]/20 bg-orange-50/30">
-                            <tr>
-                                <th className="py-4 px-4 font-bold">Titik</th>
-                                <th className="py-4 px-4 font-bold">ID</th>
-                                <th className="py-4 px-4 font-bold text-center">Status</th>
-                                <th className="py-4 px-4 font-bold">Baterai</th>
-                                <th className="py-4 px-4 font-bold">Status Baterai</th>
-                                <th className="py-4 px-4 font-bold">Curah Hujan</th>
-                                <th className="py-4 px-4 font-bold">Kelembapan Tanah</th>
-                                <th className="py-4 px-4 font-bold">Kemiringan</th>
-                                <th className="py-4 px-4 font-bold">Getaran</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-[#936440]/10">
-                            {sensorData.map((data, index) => (
-                            <tr key={index} className="hover:bg-orange-50/50 transition-colors">
-                                <td className="py-4 px-4 font-bold text-[#0B592F]">{data.station}</td>
-                                <td className="py-4 px-4 text-gray-500 font-medium">{data.id}</td>
-                                <td className="py-4 px-4 text-center">
-                                    <span className={`px-3 py-1 rounded-full text-white text-[11px] font-bold tracking-wider uppercase ${data.statusColor}`}>
-                                        {data.status}
-                                    </span>
-                                </td>
-                                <td className="py-4 px-4 min-w-[120px]">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-full bg-gray-200 rounded-full h-2">
-                                            <div className={`h-2 rounded-full ${data.battery > 50 ? 'bg-[#8CA70A]' : 'bg-red-500'}`} style={{ width: `${data.battery}%` }}></div>
-                                        </div>
-                                        <span className="text-xs font-bold text-gray-700 w-8">{data.battery}%</span>
-                                    </div>
-                                </td>
-                                <td className="py-4 px-4 font-bold text-[#936440]">{data.batteryStatus}</td>
-                                <td className="py-4 px-4 font-semibold text-gray-700">{data.rain}</td>
-                                <td className="py-4 px-4 font-bold text-[#DF6F3B]">{data.soilMoisture}%</td>
-                                <td className="py-4 px-4 font-semibold text-gray-700">{data.tilt}</td>
-                                <td className="py-4 px-4 font-semibold text-gray-700">{data.vibration}</td>
-                            </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div className="flex flex-col bg-white rounded-xl shadow-lg border-2 border-[#936440]/60">
-                <div className="flex justify-between p-4 items-center border-b border-[#936440]/20 bg-gray-50/50 rounded-t-xl">
-                    <div className="flex flex-col">
-                        <span className="text-[20px] font-bold text-[#0B592F] leading-tight">Equipment Map</span>
-                        <span className="text-[14px] text-[#936440] leading-tight">Klik Titik untuk Detail Sensor</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-x-6 gap-y-2">
-                        {status.map((item) => (
-                        <div key={item.id} className="flex flex-row gap-2 items-center">
-                            <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
-                            <span className="text-[#936440] font-semibold text-[12px]">{item.name}</span>
-                        </div>
-                        ))}
-                    </div>
-                </div>
-                <div className="w-full h-[450px] relative z-0 rounded-b-xl overflow-hidden">
-                    <MapWrapper />
-                </div>
-            </div>
-
-        </section>
+        <Monitoring/>
 
         <section className="w-full py-4">
           <h2 className="py-4 text-[#0B592F] text-center text-[16px] md:text-[20px] lg:text-[24px] xl:text-[32px] leading-tight font-bold">Riwayat Bencana Desa Cipelah</h2>
