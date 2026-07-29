@@ -1,11 +1,13 @@
 'use client'
+import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 // DAFTAR EMAIL YANG DIIZINKAN (Whitelist)
 // Nanti kamu bisa tambah email relawan desa di sini
 const ALLOWED_EMAILS = [
-  "admin@desa.com", 
-  "kamu@gmail.com"
+  "jagawara.arenta@gmail.com", 
+  "akbaribnu031@gmail.com"
 ];
 
 export default function AdminDashboard() {
@@ -123,42 +125,41 @@ export default function AdminDashboard() {
     );
   }
 
-  // ==========================================
-  // TAMPILAN 4: DASHBOARD UTAMA (Email terdaftar & Valid)
-  // ==========================================
   return (
     <div className="flex h-screen bg-gray-100 font-sans">
-      {/* --- SIDEBAR NAVIGASI --- */}
-      <aside className="w-64 bg-slate-900 text-white flex flex-col hidden md:flex">
-        <div className="p-6 text-2xl font-extrabold border-b border-slate-800 tracking-wider">
-          EWS<span className="text-blue-500">Admin</span>
+      <aside className="w-72 bg-slate-900 text-white flex flex-col hidden md:flex">
+        <div className="p-6 flex flex-col justify-center text-center lg:text-left leading-tight">
+          <h1 className="text-white text-[20px] lg:text-[24px] font-bold">JAGAWARA ARENTA</h1>
+          <h3 className="text-white text-[20px] lg:text-[24px] font-extrabold"><span className="text-blue-500">Admin</span> Dashboard</h3>
         </div>
         
         {/* Info User di Sidebar */}
-        <div className="px-6 py-4 bg-slate-800/50 border-b border-slate-800">
-          <p className="text-xs text-slate-400 uppercase tracking-wider font-bold mb-1">Login sebagai:</p>
-          <p className="text-sm font-medium truncate text-blue-300">{savedEmail}</p>
+        <div className="px-6 py-4 bg-slate-800/50 border-b border-slate-800 leading-snug">
+          <p className="text-[12px] text-slate-400 uppercase tracking-wider font-bold mb-1">Login sebagai:</p>
+          <p className="text-[14px] font-medium truncate text-blue-300">{savedEmail}</p>
         </div>
 
         <nav className="flex-1 p-4 space-y-2 mt-2">
-          <a href="#" className="block py-3 px-4 rounded transition duration-200 bg-blue-600 shadow-md font-semibold">
-            Dashboard Utama
-          </a>
+          <Link href="/admin" className="block py-3 px-4 rounded transition duration-200 bg-blue-600 shadow-md font-semibold active:scale-90">
+            Dashboard Admin
+          </Link>
+          <Link href="/admin/kelola-berita" className="block py-3 px-4 rounded transition duration-200 bg-blue-600 shadow-md font-semibold active:scale-90">
+            Kelola Histori Bencana
+          </Link>
+          <Link href="/admin/export-data" className="block py-3 px-4 rounded transition duration-200 bg-blue-600 shadow-md font-semibold active:scale-90">
+            Export Data
+          </Link>
           <a href="#" className="block py-3 px-4 rounded transition duration-200 hover:bg-slate-800 text-slate-300">
             Status Perangkat IoT
-          </a>
-          <a href="#" className="block py-3 px-4 rounded transition duration-200 hover:bg-slate-800 text-slate-300">
-            Peta Rawan Bencana
           </a>
           <a href="#" className="block py-3 px-4 rounded transition duration-200 hover:bg-slate-800 text-slate-300">
             Manajemen Notifikasi
           </a>
         </nav>
         <div className="p-4 border-t border-slate-800">
-          {/* Tombol Logout dipasang fungsi handleLogout */}
           <button 
             onClick={handleLogout}
-            className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition-colors"
+            className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition-colors cursor-pointer active:scale-90"
           >
             Logout Sistem
           </button>

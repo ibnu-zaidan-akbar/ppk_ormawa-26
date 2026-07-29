@@ -1,12 +1,11 @@
-"use client";
 import Image from "next/image";
 import Weather from "../components/weatherPrediction";
-import dynamic from 'next/dynamic';
+import NotificationManager from "../components/Notification";
 
-const MapComponent = dynamic(() => import('../components/EquipmentMap'), { 
-    ssr: false,
-    loading: () => <div className="w-full h-[400px] bg-gray-200 animate-pulse rounded-xl flex items-center justify-center">Memuat Peta...</div>
-});
+import { client } from "@/src/sanity/lib/client";
+import { urlFor } from "@/src/sanity/lib/image";
+import BeritaSlider from "@/src/components/BeritaSlider";
+import MapWrapper from "../components/WrapperMap";
 
 const status = [
     {id: 1, name: "Normal", color: "bg-[#8CA70A]"},
@@ -57,7 +56,17 @@ const newsHistory = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const beritaQuery = `*[_type == "berita"] | order(_createdAt asc)`;
+  const rawBeritaData = await client.fetch(beritaQuery, {}, { next: { revalidate: 60 } });
+  const beritaData = rawBeritaData.map((item: any) => ({
+      id: item._id,
+      judul: item.judul,
+      tahun: item.tahun,
+      deskripsi: item.deskripsi,
+      cover_foto: item.galeri_foto && item.galeri_foto.length > 0 ? urlFor(item.galeri_foto[0]).url() : null
+  }));
+
   return (
     <div className="bg-[#f4f1ea] min-h-screen pb-16 font-sans">
       
@@ -75,9 +84,7 @@ export default function Home() {
         </div>
       </div>
 
-      <main className="max-w-[1480px] mx-auto px-4 md:px-10 xl:px-8 mt-8 space-y-8">
-        
-        {/* BAGIAN 1: PREDIKSI CUACA */}
+      <main className="max-w-[1480px] mx-auto px-6 md:px-10 xl:px-8 mt-8 space-y-8">
         <section className="w-full drop-shadow-md">
             <Weather/>
         </section>
@@ -85,8 +92,29 @@ export default function Home() {
         {/* BAGIAN 2: DATA SENSOR & PETA (Posisi Atas-Bawah) */}
         <section className="flex flex-col gap-8 w-full">
             
-            {/* ATAS: Tabel Data Sensor Lengkap */}
-            <div className="flex flex-col bg-white rounded-xl shadow-lg border-2 border-[#936440]/60 overflow-hidden">
+            {/* Kiri: Peta Lokasi */}
+            <div className="flex flex-col bg-white rounded-xl shadow-lg border-2 border-[#936440]/60 overflow-hidden h-full">
+                <div className="flex flex-col xl:flex-row justify-between p-4 items-start xl:items-center border-b border-[#936440]/20 bg-gray-50/50">
+                    <div className="flex flex-col mb-3 xl:mb-0">
+                        <span className="text-[20px] font-bold text-[#0B592F] leading-tight">Equipment Map</span>
+                        <span className="text-[14px] text-[#936440] leading-tight">Klik Titik untuk Detail Sensor</span>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-2 gap-2">
+                        {status.map((item) => (
+                        <div key={item.id} className="flex flex-row gap-2 items-center">
+                            <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
+                            <span className="text-[#936440] font-semibold text-[12px]">{item.name}</span>
+                        </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="flex-1 min-h-[350px]">
+                    <MapWrapper />
+                </div>
+            </div>
+
+            {/* Kanan: Tabel Data Sensor */}
+            <div className="flex flex-col bg-white rounded-xl shadow-lg border-2 border-[#936440]/60 overflow-hidden h-full">
                 <div className="p-4 border-b border-[#936440]/20 bg-gray-50/50">
                     <span className="text-[20px] font-bold text-[#0B592F] leading-tight block">Equipment Sensor Data</span>
                     <span className="text-[14px] text-[#936440] leading-tight">Live monitoring data status</span>
@@ -170,29 +198,22 @@ export default function Home() {
 
         </section>
 
-        {/* BAGIAN 3: BERITA BENCANA */}
-        <section className="w-full mt-12 bg-white/50 p-6 rounded-xl border-2 border-[#936440]/30 shadow-sm">
-          <h2 className="text-[24px] font-bold text-[#0B592F] mb-6 border-b-2 border-[#0B592F] inline-block pb-1">Berita Bencana Terbaru</h2>
-          <div className="space-y-8">
-            {newsHistory.map((news) => (
-              <div key={news.id} className="flex flex-col md:flex-row gap-6 items-start">
-                <div className="w-full md:w-[350px] h-[200px] relative shrink-0 rounded-lg overflow-hidden border-2 border-[#936440]/20 shadow-md">
-                    <Image 
-                        src={news.img} 
-                        alt="Berita Bencana" 
-                        fill 
-                        className="object-cover hover:scale-105 transition-transform duration-500"
-                    />
-                </div>
-                <p className="text-[15px] text-gray-700 leading-relaxed text-justify flex-1 font-medium">
-                  {news.text}
-                </p>
-              </div>
-            ))}
-          </div>
+        <section className="w-full py-4">
+          <h2 className="py-4 text-[#0B592F] text-center text-[16px] md:text-[20px] lg:text-[24px] xl:text-[32px] leading-tight font-bold">Riwayat Bencana Desa Cipelah</h2>
+          {beritaData && beritaData.length > 0 ? (
+            <BeritaSlider beritaData={beritaData} />
+          ) : (
+            <div className="w-fit flex flex-col items-center justify-center mx-auto py-16 px-4 bg-gray-50/50 rounded-2xl border-2 border-dashed border-gray-300">
+              <div className="text-5xl mb-4 grayscale opacity-50">📰</div>
+              <h3 className="text-[#936440] text-[12px] xl:text-[20px] leading-tight font-bold mb-1">Belum Ada Catatan</h3>
+              <p className="text-[#936440] text-[8px] xl:text-[14px] text-center max-w-md">Syukurlah, saat ini belum ada riwayat bencana atau pergerakan tanah yang tercatat di Desa Cipelah.</p>
+            </div>
+          )}
         </section>
 
       </main>
+      
+      <NotificationManager/>
     </div>
   );
 }
