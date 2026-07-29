@@ -14,12 +14,35 @@ const status = [
     {id: 4, name: "Awas", color: "bg-[#FF1100]"}
 ];
 
-// --- DATA DUMMY SESUAI INSTRUKSI ---
+// --- DATA DUMMY SENSOR TERBARU ---
 const sensorData = [
-  { station: 'Kantor Desa', id: 'PD-001', water: 32, humidity: 68 },
-  { station: 'Curug', id: 'PD-002', water: 58, humidity: 92 },
+  { 
+    station: 'Kantor Desa', 
+    id: 'PD-001', 
+    status: 'Normal',
+    statusColor: 'bg-[#8CA70A]', 
+    battery: 85, 
+    batteryStatus: 'Discharge', 
+    rain: '0 mm/jam', 
+    soilMoisture: 45, 
+    tilt: '0.1°', 
+    vibration: '0.01 g' 
+  },
+  { 
+    station: 'Curug', 
+    id: 'PD-002', 
+    status: 'Siaga',
+    statusColor: 'bg-[#DF6F3B]', 
+    battery: 42, 
+    batteryStatus: 'Charge', 
+    rain: '12 mm/jam', 
+    soilMoisture: 78, 
+    tilt: '1.2°', 
+    vibration: '0.05 g' 
+  },
 ];
 
+// --- DATA DUMMY BERITA BENCANA ---
 const newsHistory = [
   { 
     id: 1, 
@@ -66,8 +89,8 @@ export default async function Home() {
             <Weather/>
         </section>
 
-        {/* BAGIAN 2: PETA DAN DATA SENSOR (Grid 2 Kolom) */}
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+        {/* BAGIAN 2: DATA SENSOR & PETA (Posisi Atas-Bawah) */}
+        <section className="flex flex-col gap-8 w-full">
             
             {/* Kiri: Peta Lokasi */}
             <div className="flex flex-col bg-white rounded-xl shadow-lg border-2 border-[#936440]/60 overflow-hidden h-full">
@@ -94,44 +117,82 @@ export default async function Home() {
             <div className="flex flex-col bg-white rounded-xl shadow-lg border-2 border-[#936440]/60 overflow-hidden h-full">
                 <div className="p-4 border-b border-[#936440]/20 bg-gray-50/50">
                     <span className="text-[20px] font-bold text-[#0B592F] leading-tight block">Equipment Sensor Data</span>
-                    <span className="text-[14px] text-[#936440] leading-tight">Water content and humidity level</span>
+                    <span className="text-[14px] text-[#936440] leading-tight">Live monitoring data status</span>
                 </div>
                 
-                <div className="p-4 overflow-x-auto flex-1">
+                <div className="p-4 overflow-x-auto">
                     <table className="w-full text-sm text-left whitespace-nowrap">
-                        <thead className="text-[14px] text-[#936440] border-b-2 border-[#936440]/20">
+                        <thead className="text-[14px] text-[#936440] border-b-2 border-[#936440]/20 bg-orange-50/30">
                             <tr>
-                                <th className="pb-3 font-bold">Station</th>
-                                <th className="pb-3 font-bold">ID</th>
-                                <th className="pb-3 font-bold">Water Content</th>
-                                <th className="pb-3 font-bold">Humidity</th>
+                                <th className="py-4 px-4 font-bold">Titik</th>
+                                <th className="py-4 px-4 font-bold">ID</th>
+                                <th className="py-4 px-4 font-bold text-center">Status</th>
+                                <th className="py-4 px-4 font-bold">Baterai</th>
+                                <th className="py-4 px-4 font-bold">Status Baterai</th>
+                                <th className="py-4 px-4 font-bold">Curah Hujan</th>
+                                <th className="py-4 px-4 font-bold">Kelembapan Tanah</th>
+                                <th className="py-4 px-4 font-bold">Kemiringan</th>
+                                <th className="py-4 px-4 font-bold">Getaran</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-[#936440]/10">
                             {sensorData.map((data, index) => (
-                            <tr key={index} className="hover:bg-orange-50/30 transition-colors">
-                                <td className="py-5 font-bold text-[#0B592F]">{data.station}</td>
-                                <td className="py-5 text-gray-500 font-medium">{data.id}</td>
-                                <td className="py-5 w-1/4 pr-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-full bg-gray-200 rounded-full h-2.5">
-                                        <div className="bg-[#0B592F] h-2.5 rounded-full" style={{ width: `${data.water}%` }}></div>
+                            <tr key={index} className="hover:bg-orange-50/50 transition-colors">
+                                {/* Titik */}
+                                <td className="py-4 px-4 font-bold text-[#0B592F]">{data.station}</td>
+                                {/* ID */}
+                                <td className="py-4 px-4 text-gray-500 font-medium">{data.id}</td>
+                                {/* Status (Badge) */}
+                                <td className="py-4 px-4 text-center">
+                                    <span className={`px-3 py-1 rounded-full text-white text-[11px] font-bold tracking-wider uppercase ${data.statusColor}`}>
+                                        {data.status}
+                                    </span>
+                                </td>
+                                {/* Baterai (Progress Bar) */}
+                                <td className="py-4 px-4 min-w-[120px]">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-full bg-gray-200 rounded-full h-2">
+                                            <div className={`h-2 rounded-full ${data.battery > 50 ? 'bg-[#8CA70A]' : 'bg-red-500'}`} style={{ width: `${data.battery}%` }}></div>
                                         </div>
-                                        <span className="text-xs font-bold text-gray-700 w-8">{data.water}%</span>
+                                        <span className="text-xs font-bold text-gray-700 w-8">{data.battery}%</span>
                                     </div>
                                 </td>
-                                <td className="py-5 w-1/4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-full bg-gray-200 rounded-full h-2.5">
-                                        <div className="bg-[#DF6F3B] h-2.5 rounded-full" style={{ width: `${data.humidity}%` }}></div>
-                                        </div>
-                                        <span className="text-xs font-bold text-gray-700 w-8">{data.humidity}%</span>
-                                    </div>
-                                </td>
+                                {/* Status Baterai (Teks Charge/Discharge) */}
+                                <td className="py-4 px-4 font-bold text-[#936440]">{data.batteryStatus}</td>
+                                {/* Curah Hujan */}
+                                <td className="py-4 px-4 font-semibold text-gray-700">{data.rain}</td>
+                                {/* Kelembapan Tanah (Hanya Teks Persen) */}
+                                <td className="py-4 px-4 font-bold text-[#DF6F3B]">{data.soilMoisture}%</td>
+                                {/* Kemiringan */}
+                                <td className="py-4 px-4 font-semibold text-gray-700">{data.tilt}</td>
+                                {/* Getaran */}
+                                <td className="py-4 px-4 font-semibold text-gray-700">{data.vibration}</td>
                             </tr>
                             ))}
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            {/* BAWAH: Peta Lokasi (Bug Fix Scroll Diterapkan) */}
+            <div className="flex flex-col bg-white rounded-xl shadow-lg border-2 border-[#936440]/60">
+                <div className="flex justify-between p-4 items-center border-b border-[#936440]/20 bg-gray-50/50 rounded-t-xl">
+                    <div className="flex flex-col">
+                        <span className="text-[20px] font-bold text-[#0B592F] leading-tight">Equipment Map</span>
+                        <span className="text-[14px] text-[#936440] leading-tight">Klik Titik untuk Detail Sensor</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-x-6 gap-y-2">
+                        {status.map((item) => (
+                        <div key={item.id} className="flex flex-row gap-2 items-center">
+                            <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
+                            <span className="text-[#936440] font-semibold text-[12px]">{item.name}</span>
+                        </div>
+                        ))}
+                    </div>
+                </div>
+                {/* overflow-hidden dan rounded-b-xl dipindah ke sini */}
+                <div className="w-full h-[450px] relative z-0 rounded-b-xl overflow-hidden">
+                    <MapComponent />
                 </div>
             </div>
 
