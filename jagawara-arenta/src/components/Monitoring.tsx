@@ -17,12 +17,38 @@ const status = [
 ];
 
 const sensorData = [
-    { station: "Kantor Kades", id: "EWS-01", water: 45, humidity: 60, lat: -7.187398, lng: 107.283043 },
-    { station: "Curug Cipelah", id: "EWS-02", water: 80, humidity: 75, lat: -7.195821, lng: 107.261151 },
+  { 
+    station: 'Kantor Desa', 
+    id: 'EWS-01', 
+    status: 'NORMAL',
+    statusColor: 'bg-[#8CA70A]', 
+    battery: 85, 
+    batteryStatus: 'Discharge', 
+    curah_hujan: '0', 
+    kelembapan: 45, 
+    kemiringan: '0.1', 
+    getaran: '0.01',
+    lat: -7.187398,
+    lng: 107.283043
+  },
+  { 
+    station: 'Curug Cipelah', 
+    id: 'EWS-02', 
+    status: 'SIAGA',
+    statusColor: 'bg-[#DF6F3B]', 
+    battery: 42, 
+    batteryStatus: 'Charge', 
+    curah_hujan: '12', 
+    kelembapan: 78, 
+    kemiringan: '1.2', 
+    getaran: '0.05',
+    lat: -7.195821,
+    lng: 107.261151
+  },
 ];
 
 export default function Monitoring(){
-    const [titikFokus, setTitikFokus] = useState<{ lat: Number; lng: number} | null>(null);
+    const [titikFokus, setTitikFokus] = useState<{ lat: number; lng: number} | null>(null);
     const petaRef = useRef<HTMLDivElement>(null);
     const handleKlikBaris = (lat: number, lng: number) => {
         setTitikFokus({ lat, lng });
@@ -30,17 +56,65 @@ export default function Monitoring(){
     };
 
     return(
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full mt-8">
-            
-            {/* Kiri: Peta Lokasi */}
-            {/* Tambahkan ref={petaRef} di sini untuk target scroll */}
-            <div ref={petaRef} className="flex flex-col bg-white rounded-xl shadow-lg border-2 border-[#936440]/60 overflow-hidden h-full scroll-mt-24">
-                <div className="flex flex-col xl:flex-row justify-between p-4 items-start xl:items-center border-b border-[#936440]/20 bg-gray-50/50">
-                    <div className="flex flex-col mb-3 xl:mb-0">
-                        <span className="text-[20px] font-bold text-[#0B592F] leading-tight">Equipment Map</span>
+        <section className="flex flex-col gap-8 w-full">
+            <div className="flex flex-col bg-white rounded-xl shadow-lg border-2 border-[#936440]/60 overflow-hidden h-full">
+                <div className="p-4 border-b border-[#936440]/20 bg-gray-50/50">
+                    <span className="text-[20px] font-bold text-[#0B592F] leading-tight block">Sensor Data Lapangan</span>
+                    <span className="text-[14px] text-[#936440] leading-tight">Live monitoring status data</span>
+                </div>
+                
+                <div className="p-4 overflow-x-auto">
+                    <table className="w-full text-sm text-left whitespace-nowrap">
+                        <thead className="text-[14px] text-[#936440] border-b-2 border-[#936440]/20 bg-orange-50/30">
+                            <tr>
+                                <th className="py-4 px-4 font-bold">Titik</th>
+                                <th className="py-4 px-4 font-bold">ID</th>
+                                <th className="py-4 px-4 font-bold text-center">Status</th>
+                                <th className="py-4 px-4 font-bold">Baterai</th>
+                                <th className="py-4 px-4 font-bold">Status Baterai</th>
+                                <th className="py-4 px-4 font-bold">Curah Hujan</th>
+                                <th className="py-4 px-4 font-bold">Kelembapan Tanah</th>
+                                <th className="py-4 px-4 font-bold">Kemiringan</th>
+                                <th className="py-4 px-4 font-bold">Getaran</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[#936440]/10">
+                            {sensorData.map((data, index) => (
+                            <tr key={index} onClick={() => handleKlikBaris(data.lat, data.lng)} className="hover:bg-orange-100/60 transition-colors">
+                                <td className="py-4 px-4 font-bold text-[#0B592F]">{data.station}</td>
+                                <td className="py-4 px-4 text-gray-500 font-medium">{data.id}</td>
+                                <td className="py-4 px-4 text-center">
+                                    <span className={`px-3 py-1 rounded-full text-white text-[11px] font-bold tracking-wider uppercase ${data.statusColor}`}>
+                                        {data.status}
+                                    </span>
+                                </td>
+                                <td className="py-4 px-4 min-w-[120px]">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-full bg-gray-200 rounded-full h-2">
+                                            <div className={`h-2 rounded-full ${data.battery > 50 ? 'bg-[#8CA70A]' : 'bg-red-500'}`} style={{ width: `${data.battery}%` }}></div>
+                                        </div>
+                                        <span className="text-xs font-bold text-gray-700 w-8">{data.battery}%</span>
+                                    </div>
+                                </td>
+                                <td className="py-4 px-4 font-bold text-[#936440]">{data.batteryStatus}</td>
+                                <td className="py-4 px-4 font-semibold text-gray-700">{data.curah_hujan} mm/jam</td>
+                                <td className="py-4 px-4 font-bold text-[#DF6F3B]">{data.kelembapan}%</td>
+                                <td className="py-4 px-4 font-semibold text-gray-700">{data.kemiringan} °</td>
+                                <td className="py-4 px-4 font-semibold text-gray-700">{data.getaran} g</td>
+                            </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div ref={petaRef} className="flex flex-col bg-white rounded-xl shadow-lg border-2 border-[#936440]/60">
+                <div className="flex justify-between p-4 items-center border-b border-[#936440]/20 bg-gray-50/50 rounded-t-xl">
+                    <div className="flex flex-col">
+                        <span className="text-[20px] font-bold text-[#0B592F] leading-tight">Peta Desa</span>
                         <span className="text-[14px] text-[#936440] leading-tight">Klik Titik untuk Detail Sensor</span>
                     </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-x-6 gap-y-2">
                         {status.map((item) => (
                         <div key={item.id} className="flex flex-row gap-2 items-center">
                             <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
@@ -49,63 +123,10 @@ export default function Monitoring(){
                         ))}
                     </div>
                 </div>
-                <div className="flex-1 min-h-[350px]">
-                    {/* Lempar state titikFokus ke peta */}
-                    {/* <EquipmentMap titikFokus={titikFokus} /> */}
+                <div className="w-full h-[450px] relative z-0 rounded-b-xl overflow-hidden">
+                    <EquipmentMap titikFokus={titikFokus}/>
                 </div>
             </div>
-
-            {/* Kanan: Tabel Data Sensor */}
-            <div className="flex flex-col bg-white rounded-xl shadow-lg border-2 border-[#936440]/60 overflow-hidden h-full">
-                <div className="p-4 border-b border-[#936440]/20 bg-gray-50/50">
-                    <span className="text-[20px] font-bold text-[#0B592F] leading-tight block">Equipment Sensor Data</span>
-                    <span className="text-[14px] text-[#936440] leading-tight">Water content and humidity level</span>
-                </div>
-                
-                <div className="p-4 overflow-x-auto flex-1">
-                    <table className="w-full text-sm text-left whitespace-nowrap">
-                        <thead className="text-[14px] text-[#936440] border-b-2 border-[#936440]/20">
-                            <tr>
-                                <th className="pb-3 font-bold">Station</th>
-                                <th className="pb-3 font-bold">ID</th>
-                                <th className="pb-3 font-bold">Water Content</th>
-                                <th className="pb-3 font-bold">Humidity</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-[#936440]/10">
-                            {sensorData.map((data, index) => (
-                            <tr 
-                                key={index} 
-                                // Tambahkan event onClick dan cursor-pointer di baris tabel
-                                onClick={() => handleKlikBaris(data.lat, data.lng)}
-                                className="hover:bg-orange-50/50 transition-colors cursor-pointer"
-                                title="Klik untuk lihat di Peta"
-                            >
-                                <td className="py-5 font-bold text-[#0B592F]">{data.station}</td>
-                                <td className="py-5 text-gray-500 font-medium">{data.id}</td>
-                                <td className="py-5 w-1/4 pr-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-full bg-gray-200 rounded-full h-2.5">
-                                        <div className="bg-[#0B592F] h-2.5 rounded-full" style={{ width: `${data.water}%` }}></div>
-                                        </div>
-                                        <span className="text-xs font-bold text-gray-700 w-8">{data.water}%</span>
-                                    </div>
-                                </td>
-                                <td className="py-5 w-1/4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-full bg-gray-200 rounded-full h-2.5">
-                                        <div className="bg-[#DF6F3B] h-2.5 rounded-full" style={{ width: `${data.humidity}%` }}></div>
-                                        </div>
-                                        <span className="text-xs font-bold text-gray-700 w-8">{data.humidity}%</span>
-                                    </div>
-                                </td>
-                            </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
         </section>
     );
 }

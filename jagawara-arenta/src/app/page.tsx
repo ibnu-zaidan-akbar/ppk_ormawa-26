@@ -5,13 +5,13 @@ import NotificationManager from "../components/Notification";
 import { client } from "@/src/sanity/lib/client";
 import { urlFor } from "@/src/sanity/lib/image";
 import BeritaSlider from "@/src/components/BeritaSlider";
-import MapWrapper from "../components/WrapperMap";
+import Monitoring from "@/src/components/Monitoring";
 
 const status = [
-    {id: 1, name: "Normal", color: "bg-[#8CA70A]"},
-    {id: 2, name: "Siaga", color: "bg-[#DF6F3B]"},
-    {id: 3, name: "Waspada", color: "bg-[#EEB627]"},
-    {id: 4, name: "Awas", color: "bg-[#FF1100]"}
+    {id: 1, name: "NORMAL", color: "bg-[#8CA70A]"},
+    {id: 2, name: "SIAGA", color: "bg-[#DF6F3B]"},
+    {id: 3, name: "WASPADA", color: "bg-[#EEB627]"},
+    {id: 4, name: "AWAS", color: "bg-[#FF1100]"}
 ];
 
 // --- DATA DUMMY SENSOR TERBARU ---
@@ -42,20 +42,6 @@ const sensorData = [
   },
 ];
 
-// --- DATA DUMMY BERITA BENCANA ---
-const newsHistory = [
-  { 
-    id: 1, 
-    img: '/longsor-cipelah.jpg', 
-    text: 'Telah terjadi longsor di tebing pemukiman warga Desa Cipelah akibat hujan deras yang mengguyur sejak semalam. Warga dihimbau untuk tetap waspada dan menjauhi area tebing.' 
-  },
-  { 
-    id: 2, 
-    img: '/longsor-desa-cipelah.jpg', 
-    text: 'Tim relawan dan perangkat desa sedang melakukan pendataan dan evakuasi terhadap rumah-rumah yang terdampak material longsor. Jalur evakuasi sementara telah disiapkan di balai desa.' 
-  },
-];
-
 export default async function Home() {
   const beritaQuery = `*[_type == "berita"] | order(_createdAt asc)`;
   const rawBeritaData = await client.fetch(beritaQuery, {}, { next: { revalidate: 60 } });
@@ -69,8 +55,6 @@ export default async function Home() {
 
   return (
     <div className="bg-[#f4f1ea] min-h-screen pb-16 font-sans">
-      
-      {/* HEADER UTAMA */}
       <div className="sticky top-0 z-50 p-2 lg:py-4 lg:px-8 bg-white w-full h-fit shadow-md border-b-[4px] border-[#0B592F] items-center flex justify-between lg:justify-start lg:gap-4">
         <div className="w-10 h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 relative items-center order-1">
           <Image src="/icon/mountain.svg" alt="icon" fill className="object-contain" />
@@ -88,115 +72,7 @@ export default async function Home() {
         <section className="w-full drop-shadow-md">
             <Weather/>
         </section>
-
-        {/* BAGIAN 2: DATA SENSOR & PETA (Posisi Atas-Bawah) */}
-        <section className="flex flex-col gap-8 w-full">
-            
-            {/* Kiri: Peta Lokasi */}
-            <div className="flex flex-col bg-white rounded-xl shadow-lg border-2 border-[#936440]/60 overflow-hidden h-full">
-                <div className="flex flex-col xl:flex-row justify-between p-4 items-start xl:items-center border-b border-[#936440]/20 bg-gray-50/50">
-                    <div className="flex flex-col mb-3 xl:mb-0">
-                        <span className="text-[20px] font-bold text-[#0B592F] leading-tight">Equipment Map</span>
-                        <span className="text-[14px] text-[#936440] leading-tight">Klik Titik untuk Detail Sensor</span>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-2 gap-2">
-                        {status.map((item) => (
-                        <div key={item.id} className="flex flex-row gap-2 items-center">
-                            <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
-                            <span className="text-[#936440] font-semibold text-[12px]">{item.name}</span>
-                        </div>
-                        ))}
-                    </div>
-                </div>
-                <div className="flex-1 min-h-[350px]">
-                    <MapWrapper />
-                </div>
-            </div>
-
-            {/* Kanan: Tabel Data Sensor */}
-            <div className="flex flex-col bg-white rounded-xl shadow-lg border-2 border-[#936440]/60 overflow-hidden h-full">
-                <div className="p-4 border-b border-[#936440]/20 bg-gray-50/50">
-                    <span className="text-[20px] font-bold text-[#0B592F] leading-tight block">Equipment Sensor Data</span>
-                    <span className="text-[14px] text-[#936440] leading-tight">Live monitoring data status</span>
-                </div>
-                
-                <div className="p-4 overflow-x-auto">
-                    <table className="w-full text-sm text-left whitespace-nowrap">
-                        <thead className="text-[14px] text-[#936440] border-b-2 border-[#936440]/20 bg-orange-50/30">
-                            <tr>
-                                <th className="py-4 px-4 font-bold">Titik</th>
-                                <th className="py-4 px-4 font-bold">ID</th>
-                                <th className="py-4 px-4 font-bold text-center">Status</th>
-                                <th className="py-4 px-4 font-bold">Baterai</th>
-                                <th className="py-4 px-4 font-bold">Status Baterai</th>
-                                <th className="py-4 px-4 font-bold">Curah Hujan</th>
-                                <th className="py-4 px-4 font-bold">Kelembapan Tanah</th>
-                                <th className="py-4 px-4 font-bold">Kemiringan</th>
-                                <th className="py-4 px-4 font-bold">Getaran</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-[#936440]/10">
-                            {sensorData.map((data, index) => (
-                            <tr key={index} className="hover:bg-orange-50/50 transition-colors">
-                                {/* Titik */}
-                                <td className="py-4 px-4 font-bold text-[#0B592F]">{data.station}</td>
-                                {/* ID */}
-                                <td className="py-4 px-4 text-gray-500 font-medium">{data.id}</td>
-                                {/* Status (Badge) */}
-                                <td className="py-4 px-4 text-center">
-                                    <span className={`px-3 py-1 rounded-full text-white text-[11px] font-bold tracking-wider uppercase ${data.statusColor}`}>
-                                        {data.status}
-                                    </span>
-                                </td>
-                                {/* Baterai (Progress Bar) */}
-                                <td className="py-4 px-4 min-w-[120px]">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-full bg-gray-200 rounded-full h-2">
-                                            <div className={`h-2 rounded-full ${data.battery > 50 ? 'bg-[#8CA70A]' : 'bg-red-500'}`} style={{ width: `${data.battery}%` }}></div>
-                                        </div>
-                                        <span className="text-xs font-bold text-gray-700 w-8">{data.battery}%</span>
-                                    </div>
-                                </td>
-                                {/* Status Baterai (Teks Charge/Discharge) */}
-                                <td className="py-4 px-4 font-bold text-[#936440]">{data.batteryStatus}</td>
-                                {/* Curah Hujan */}
-                                <td className="py-4 px-4 font-semibold text-gray-700">{data.rain}</td>
-                                {/* Kelembapan Tanah (Hanya Teks Persen) */}
-                                <td className="py-4 px-4 font-bold text-[#DF6F3B]">{data.soilMoisture}%</td>
-                                {/* Kemiringan */}
-                                <td className="py-4 px-4 font-semibold text-gray-700">{data.tilt}</td>
-                                {/* Getaran */}
-                                <td className="py-4 px-4 font-semibold text-gray-700">{data.vibration}</td>
-                            </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            {/* BAWAH: Peta Lokasi (Bug Fix Scroll Diterapkan) */}
-            <div className="flex flex-col bg-white rounded-xl shadow-lg border-2 border-[#936440]/60">
-                <div className="flex justify-between p-4 items-center border-b border-[#936440]/20 bg-gray-50/50 rounded-t-xl">
-                    <div className="flex flex-col">
-                        <span className="text-[20px] font-bold text-[#0B592F] leading-tight">Equipment Map</span>
-                        <span className="text-[14px] text-[#936440] leading-tight">Klik Titik untuk Detail Sensor</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-x-6 gap-y-2">
-                        {status.map((item) => (
-                        <div key={item.id} className="flex flex-row gap-2 items-center">
-                            <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
-                            <span className="text-[#936440] font-semibold text-[12px]">{item.name}</span>
-                        </div>
-                        ))}
-                    </div>
-                </div>
-                {/* overflow-hidden dan rounded-b-xl dipindah ke sini */}
-                <div className="w-full h-[450px] relative z-0 rounded-b-xl overflow-hidden">
-                    <MapComponent />
-                </div>
-            </div>
-
-        </section>
+        <Monitoring/>
 
         <section className="w-full py-4">
           <h2 className="py-4 text-[#0B592F] text-center text-[16px] md:text-[20px] lg:text-[24px] xl:text-[32px] leading-tight font-bold">Riwayat Bencana Desa Cipelah</h2>
