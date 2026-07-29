@@ -1,6 +1,8 @@
 "use client";
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { useEffect } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
+import "leaflet/dist/leaflet.css"
 
 const customIcon = new L.Icon({
     iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
@@ -9,8 +11,20 @@ const customIcon = new L.Icon({
     iconAnchor: [12, 41]
 });
 
-export default function EquipmentMap() {
-    // Format: [Latitude, Longitude]
+function KameraPeta({ titikFokus }: { titikFokus: { lat: number; lng: number } | null }){
+    const map = useMap();
+    useEffect(() => {
+        if(titikFokus){
+            map.flyTo([titikFokus.lat, titikFokus.lng], 18, {
+                animate: true,
+                duration: 1.5
+            });
+        }
+    }, [titikFokus, map]);
+    return null;
+}
+
+export default function EquipmentMap({ titikFokus }: { titikFokus: { lat: number; lng: number } | null }) {
     const mapCenter: [number, number] = [-7.187153, 107.284926]; 
     const devices = [                   // dummy
         { id: 1, name: "Kantor Kepala Desa Cipelah", location: [-7.187398, 107.283043] },
@@ -18,9 +32,10 @@ export default function EquipmentMap() {
     ];
 
     return (
-        <div className="w-full h-[400px] xl:h-[500px] z-0 relative overflow-hidden">
+        <div className="w-full h-full z-0 relative overflow-hidden">
             <MapContainer center={mapCenter} zoom={18} maxZoom={21} scrollWheelZoom={false} touchZoom={true} className="w-full h-full z-0">
                 <TileLayer attribution='&copy; <a href="https://www.esri.com/">Esri</a>' url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" maxZoom={21} maxNativeZoom={18}/>
+                <KameraPeta titikFokus={titikFokus}/>
                 {devices.map((device) => (
                     <Marker key={device.id} position={device.location as [number, number]} icon={customIcon}>
                         <Popup>
