@@ -1,7 +1,6 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
-// Fungsi ini dipakai untuk komponen server dan route handler
 export async function createClient() {
   const cookieStore = await cookies()
 
