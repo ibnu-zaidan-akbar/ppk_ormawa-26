@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
-import { create } from "domain";
-import { get } from "http";
 
 export async function middleware(request: NextRequest){
     let supabaseResponse = NextResponse.next({
@@ -37,12 +35,13 @@ export async function middleware(request: NextRequest){
         return NextResponse.redirect(url)
     }
 
-    if(request.nextUrl.pathname.startsWith('/admin') && user){
+    if(request.nextUrl.pathname.startsWith('/login') && user){
         const url = request.nextUrl.clone()
         url.pathname = '/admin'
         return NextResponse.redirect(url)
     }
 
+    return supabaseResponse;
 }
 
 export const config = {
