@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@sanity/client';
+export const dynamic = 'force-dynamic';
 
 const sanityClient = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
@@ -15,7 +16,7 @@ export async function GET(request: Request){
   try{
     const query = `*[_type == "berita"] | order(tahun desc) {
       _id, judul, tahun, deskripsi,
-      "fotoList": foto[]{
+      "fotoList": galeri_foto[]{
         "key": _key,
         "ref": asset._ref,
         "url": asset->url
@@ -75,7 +76,7 @@ export async function PUT(request: Request) {
     const judul = formData.get('judul') as string;
     const tahun = Number(formData.get('tahun'));
     const deskripsi = formData.get('deskripsi') as string;
-    const existingPhotosStr = formData.get('existringPhotos') as string;
+    const existingPhotosStr = formData.get('existingPhotos') as string;
     const existingPhotos = existingPhotosStr ? JSON.parse(existingPhotosStr) : [];
 
     const newFiles = formData.getAll('newFoto') as File[];
@@ -96,7 +97,7 @@ export async function PUT(request: Request) {
     const finalPhotos = [...existingPhotos, ...newImageAssets];
     const result = await sanityClient
       .patch(id)
-      .set({ judul, tahun, deskripsi, foto: finalPhotos })
+      .set({ judul, tahun, deskripsi, galeri_foto: finalPhotos })
       .commit();
 
     return NextResponse.json({ message: 'Berita berhasil diperbarui', data: result }, { status: 200 });
