@@ -58,7 +58,7 @@ export default function Monitoring(){
     return(
         <section className="flex flex-col gap-8 w-full">
             <div className="flex flex-col bg-white rounded-xl shadow-lg border-2 border-[#936440]/60 overflow-hidden h-full">
-                <div className="p-4 border-b border-[#936440]/20 bg-gray-50/50">
+                <div className="p-4 border-b border-[#936440]/20 bg-gray-50/50 -mb-4">
                     <span className="text-[20px] font-bold text-[#0B592F] leading-tight block">Sensor Data Lapangan</span>
                     <span className="text-[14px] text-[#936440] leading-tight">Live monitoring status data</span>
                 </div>
