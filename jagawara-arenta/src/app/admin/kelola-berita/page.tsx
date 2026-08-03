@@ -12,7 +12,7 @@ interface Berita {
   judul: string;
   tahun: number;
   deskripsi: string;
-  fotoList: FotoSanity[];
+  galeri_foto: FotoSanity[];
 }
 
 export default function AdminBeritaPage() {
@@ -21,10 +21,12 @@ export default function AdminBeritaPage() {
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isLoadingProcess, setIsLoadingProcess] = useState(false);
   
   const [editData, setEditData] = useState<Berita | null>(null);
   const [existingPhotos, setExistingPhotos] = useState<FotoSanity[]>([]);
+  const [itemToDelete, setItemToDelete] = useState<string | null>(null);
   const [pesan, setPesan] = useState<{ type: 'sukses' | 'error', teks: string } | null>(null);
 
   const fetchBerita = async () => {
@@ -74,7 +76,7 @@ export default function AdminBeritaPage() {
 
   const openEditModal = (berita: Berita) => {
     setEditData(berita);
-    setExistingPhotos(berita.fotoList || []);
+    setExistingPhotos(berita.galeri_foto || []);
     setIsEditModalOpen(true);
   };
 
@@ -115,19 +117,29 @@ export default function AdminBeritaPage() {
     }
   }
 
-  async function handleDelete(id: string) {
-    if (!window.confirm("Yakin ingin menghapus catatan ini?")) return;
+  const openDeleteModal = (id: string) => {
+    setItemToDelete(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  async function handleDelete() {
+    if (!itemToDelete) return;
+    setIsLoadingProcess(true);
     setPesan(null);
     try {
-      const response = await fetch(`/api/berita?id=${id}`, { method: 'DELETE' });
+      const response = await fetch(`/api/berita?id=${itemToDelete}`, { method: 'DELETE' });
       if (response.ok) {
-        setPesan({ type: 'sukses', teks: 'Berita dihapus!' });
+        setPesan({ type: 'sukses', teks: 'Berita berhasil dihapus!' });
         fetchBerita();
       } else {
         setPesan({ type: 'error', teks: 'Gagal menghapus.' });
       }
     } catch (error) {
-      setPesan({ type: 'error', teks: 'Terjadi kesalahan.' });
+      setPesan({ type: 'error', teks: 'Terjadi kesalahan saat menghapus.' });
+    } finally {
+      setIsLoadingProcess(false);
+      setIsDeleteModalOpen(false);
+      setItemToDelete(null);
     }
   }
 
@@ -174,7 +186,7 @@ export default function AdminBeritaPage() {
                       <td className="text-center p-4 truncate max-w-xs">{item.deskripsi}</td>
                       <td className="p-4 flex justify-center gap-2">
                         <button onClick={() => openEditModal(item)} className="px-3 py-1 bg-amber-100 text-amber-700 hover:bg-amber-200 rounded font-bold">Edit</button>
-                        <button onClick={() => handleDelete(item._id)} className="px-3 py-1 bg-red-100 text-red-700 hover:bg-red-200 rounded font-bold">Hapus</button>
+                        <button onClick={() => openDeleteModal(item._id)} className="px-3 py-1 bg-red-100 text-red-700 hover:bg-red-200 rounded font-bold">Hapus</button>
                       </td>
                     </tr>
                   ))}
@@ -271,6 +283,25 @@ export default function AdminBeritaPage() {
                 {isLoadingProcess ? 'Memperbarui...' : 'Simpan Perubahan'}
               </button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md bg-white p-6 md:p-8 rounded-2xl shadow-2xl border-b-4 border-red-700 text-center">
+            <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-red-200 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-[24px] md:text-[28px] lg:text-[32px]">⚠️</div>
+            <h2 className="text-[18px] md:text-[20px] lg:text-[24px] font-black text-black mb-2 leading-tight">Hapus Catatan?</h2>
+            <p className="text-gray-700 mb-4 text-[12px] md:text-[14px] lg:text-[16px]">Apakah Anda yakin ingin menghapus berita ini secara permanen?</p>
+            
+            <div className="flex flex-col md:flex-row gap-4 justify-center">
+              <button onClick={() => {setIsDeleteModalOpen(false); setItemToDelete(null);}} disabled={isLoadingProcess} className="w-full px-6 py-3 rounded-xl font-bold text-gray-600 bg-gray-200 hover:bg-gray-300 transition-colors disabled:opacity-50 cursor-pointer">
+                Batal
+              </button>
+              <button onClick={handleDelete} disabled={isLoadingProcess} className="w-full px-6 py-3 rounded-xl font-bold text-white bg-red-700 hover:bg-red-800 transition-colors shadow-lg shadow-red-500/30 disabled:opacity-50 cursor-pointer">
+                {isLoadingProcess ? 'Menghapus...' : 'Hapus'}
+              </button>
+            </div>
           </div>
         </div>
       )}
