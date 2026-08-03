@@ -132,42 +132,60 @@ export default function AdminBeritaPage() {
   }
 
   return (
-    <div className="bg-[#f4f1ea] min-h-screen px-6 md:px-10 xl:px-8 py-6 flex items-center justify-center font-sans">
-      <div className="w-full max-w-4xl bg-white p-8 rounded-2xl shadow-xl border-2 border-[#936440]/60">
-        <h1 className="text-[20px] md:text-[28px] lg:text-[32px] font-black text-[#0B592F] text-center uppercase tracking-wider">Input Histori Bencana</h1>
-        <p className="text-[12px] md:text-[14px] lg:text-[16px] text-[#936440] text-center mb-4">Formulir Redaksi untuk Menambah Catatan ke Sistem Informasi Desa.</p>
-        <form onSubmit={handleAddSubmit} className="space-y-4">
+    <div className="bg-[#f4f1ea] min-h-screen px-4 md:px-8 lg:px-10 py-10 font-sans">
+      <div className="w-full mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
           <div>
-            <label className="block text-[10px] md:text-[12px] lg:text-[14px] font-bold text-gray-700 mb-1">Judul Berita / Kejadian</label>
-            <input type="text" name="judul" required placeholder="Contoh: Longsor di Tebing Desa Cipelah" className="w-full text-[10px] md:text-[12px] lg:text-[14px] p-2 lg:px-4 lg:py-3 rounded-lg border border-gray-300 focus:border-[#936440] focus:ring-2 focus:ring-[#936440]/30 transition-all outline-none text-black"/>
+            <h1 className="text-center md:text-start text-[24px] md:text-[28px] lg:text-[32px] font-black text-[#0B592F] uppercase tracking-wider">Kelola Histori Bencana</h1>
+            <p className="text-center md:text-start text-[12px] md:text-[14px] lg:text-[16px] text-[#936440]">Manajemen arsip kejadian untuk sistem informasi desa.</p>
           </div>
-
-          <div>
-            <label className="block text-[10px] md:text-[12px] lg:text-[14px] font-bold text-gray-700 mb-1">Tahun Kejadian</label>
-            <input type="number" name="tahun" required defaultValue={new Date().getFullYear()} className="w-full text-[10px] md:text-[12px] lg:text-[14px] p-2 lg:px-4 lg:py-3 rounded-lg border border-gray-300 focus:border-[#936440] focus:ring-2 focus:ring-[#936440]/30 transition-all outline-none text-black"/>
-          </div>
-
-          <div>
-            <label className="block text-[10px] md:text-[12px] lg:text-[14px] font-bold text-gray-700 mb-1">Kronologi / Deskripsi Lengkap</label>
-            <textarea name="deskripsi" required placeholder="Ceritakan detail kejadian secara lengkap..." className="w-full text-[10px] md:text-[12px] lg:text-[14px] p-2 lg:px-4 lg:py-3 rounded-lg border border-gray-300 focus:border-[#936440] focus:ring-2 focus:ring-[#936440]/30 min-h-[80px] md:min-h-[100px] lg:min-h-[120px] transition-all outline-none resize-none text-black"></textarea>
-          </div>
-
-          <div>
-            <label className="block text-[10px] md:text-[12px] lg:text-[14px] font-bold text-gray-700 mb-1">Unggah Foto (Bisa lebih dari 1)</label>
-            <input type="file" name="foto" accept="image/*" multiple required className="w-full text-[10px] md:text-[12px] lg:text-[14px] p-2 lg:px-4 lg:py-3 rounded-lg border border-gray-300 bg-gray-50 file:mr-4 file:p-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] md:file:text-[12px] lg:file:text-[14px] file:font-bold file:bg-[#0B592F]/90 file:text-white hover:file:bg-[#0B592F] transition-all text-gray-600 cursor-pointer"/>
-            <p className="text-[10px] md:text-[12px] text-[#936440] mt-1 italic">Note : Tahan tombol CTRL untuk memilih banyak foto di folder.</p>
-          </div>
-
-          <button type="submit" disabled={isLoadingProcess}
-            className={`w-full py-4 text-[12px] md:text-[14px] lg:text-[16px] rounded-xl text-white font-black uppercase tracking-widest transition-all duration-300 cursor-pointer ${isLoadingProcess ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#0B592F]/90 hover:bg-[#0B592F] hover:shadow-lg active:scale-95'}`}
-          >
-            {isLoadingProcess ? 'Sedang Menyimpan...' : 'Terbitkan Berita'}
+          <button onClick={() => setIsAddModalOpen(true)} className="bg-[#0B592F] hover:bg-[#0B592F]/80 text-[12px] md:text-[14px] lg:text-[16px] text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all active:scale-95 cursor-pointer">
+            + Tambah Catatan Baru
           </button>
-        </form>
+        </div>
+
         {pesan && (
-          <div className={`p-4 mb-6 rounded-lg font-bold text-center ${pesan.type === 'sukses' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{pesan.teks}</div>
+          <div className={`p-4 mb-6 rounded-lg font-bold text-center shadow-sm ${pesan.type === 'sukses' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+            {pesan.teks}
+          </div>
         )}
+
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+          {isLoadingData ? (
+            <div className="p-10 text-center text-gray-500 font-bold animate-pulse">Mengambil data dari Sanity...</div>
+          ) : beritaList.length === 0 ? (
+            <div className="p-10 text-center text-gray-500">Belum ada catatan histori bencana.</div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead className="">
+                  <tr className="bg-gray-50 text-[#936440] text-sm uppercase tracking-wider">
+                    <th className="text-center p-4 font-black">Tahun</th>
+                    <th className="text-center p-4 font-black">Judul Kejadian</th>
+                    <th className="text-center p-4 font-black w-1/3">Deskripsi Singkat</th>
+                    <th className="text-center p-4 font-black">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 text-gray-700 text-sm">
+                  {beritaList.map((item) => (
+                    <tr key={item._id} className="border-t border-[#936440] hover:bg-gray-50 transition-colors">
+                      <td className="text-center p-4 font-bold">{item.tahun}</td>
+                      <td className="text-center p-4 font-semibold text-black">{item.judul}</td>
+                      <td className="text-center p-4 truncate max-w-xs">{item.deskripsi}</td>
+                      <td className="p-4 flex justify-center gap-2">
+                        <button onClick={() => openEditModal(item)} className="px-3 py-1 bg-amber-100 text-amber-700 hover:bg-amber-200 rounded font-bold">Edit</button>
+                        <button onClick={() => handleDelete(item._id)} className="px-3 py-1 bg-red-100 text-red-700 hover:bg-red-200 rounded font-bold">Hapus</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
+
+      
     </div>
   );
 }
