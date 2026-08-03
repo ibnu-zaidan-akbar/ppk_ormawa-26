@@ -172,21 +172,21 @@ export default function AdminBeritaPage() {
               <table className="w-full text-left border-collapse">
                 <thead className="">
                   <tr className="bg-gray-50 text-[#936440] text-sm uppercase tracking-wider">
-                    <th className="text-center p-4 font-black">Tahun</th>
-                    <th className="text-center p-4 font-black">Judul Kejadian</th>
-                    <th className="text-center p-4 font-black w-1/3">Deskripsi Singkat</th>
-                    <th className="text-center p-4 font-black">Aksi</th>
+                    <th className="text-center text-[12px] md:text-[14px] lg:text-[16px] py-2 px-4 md:p-4 font-black">Tahun</th>
+                    <th className="text-center text-[12px] md:text-[14px] lg:text-[16px] py-2 px-4 md:p-4 font-black">Judul Kejadian</th>
+                    <th className="text-center text-[12px] md:text-[14px] lg:text-[16px] py-2 px-4 md:p-4 font-black w-1/3">Deskripsi Singkat</th>
+                    <th className="text-center text-[12px] md:text-[14px] lg:text-[16px] py-2 px-4 md:p-4 font-black">Aksi</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 text-gray-700 text-sm">
                   {beritaList.map((item) => (
                     <tr key={item._id} className="border-t border-[#936440] hover:bg-gray-50 transition-colors">
-                      <td className="text-center p-4 font-bold">{item.tahun}</td>
-                      <td className="text-center p-4 font-semibold text-black">{item.judul}</td>
-                      <td className="text-center p-4 truncate max-w-xs">{item.deskripsi}</td>
+                      <td className="text-center text-[12px] md:text-[14px] lg:text-[16px] py-2 px-4 md:p-4 font-bold">{item.tahun}</td>
+                      <td className="text-center text-[12px] md:text-[14px] lg:text-[16px] py-2 px-4 md:p-4 font-semibold text-black">{item.judul}</td>
+                      <td className="text-center text-[12px] md:text-[14px] lg:text-[16px] py-2 px-4 md:p-4 truncate max-w-xs">{item.deskripsi}</td>
                       <td className="p-4 flex justify-center gap-2">
-                        <button onClick={() => openEditModal(item)} className="px-3 py-1 bg-amber-100 text-amber-700 hover:bg-amber-200 rounded font-bold">Edit</button>
-                        <button onClick={() => openDeleteModal(item._id)} className="px-3 py-1 bg-red-100 text-red-700 hover:bg-red-200 rounded font-bold">Hapus</button>
+                        <button onClick={() => openEditModal(item)} className="px-3 py-1 text-[12px] md:text-[14px] lg:text-[16px] bg-amber-100 text-amber-700 hover:bg-amber-200 rounded font-bold">Edit</button>
+                        <button onClick={() => openDeleteModal(item._id)} className="px-3 py-1 text-[12px] md:text-[14px] lg:text-[16px] bg-red-100 text-red-700 hover:bg-red-200 rounded font-bold">Hapus</button>
                       </td>
                     </tr>
                   ))}
