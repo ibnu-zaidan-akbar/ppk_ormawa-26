@@ -185,7 +185,38 @@ export default function AdminBeritaPage() {
         </div>
       </div>
 
-      
+      {isAddModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-4xl bg-white p-6 md:p-8 rounded-2xl shadow-2xl border-2 border-[#936440]/60 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-[20px] md:text-[22px] lg:text-[24px] xl:text-[26px] font-black text-[#0B592F] text-center uppercase tracking-wider">Input Histori Baru</h2>
+              <button onClick={() => setIsAddModalOpen(false)} className="text-gray-400 hover:text-black font-bold text-[28px] lg:text-[36px] hover:scale-110 active:scale-90">&times;</button>
+            </div>
+            <form onSubmit={handleAddSubmit} className="space-y-4">
+              <div>
+                <label className="block text-[12px] md:text-[14px] lg:text-[16px] xl:text-[18px] font-bold text-gray-700 mb-1">Judul Kejadian</label>
+                <input type="text" name="judul" required placeholder="Contoh: Longsor di Tebing Desa Cipelah" className="w-full p-2 lg:px-4 lg:py-3 text-black text-[11px] md:text-[13px] lg:text-[15px] xl:text-[17px] rounded-lg border border-gray-300 focus:border-[#936440] focus:ring-2 focus:ring-[#936440]/30 transition-all outline-none text-black"/>
+              </div>
+              <div>
+                <label className="block text-[12px] md:text-[14px] lg:text-[16px] xl:text-[18px] font-bold text-gray-700 mb-1">Tahun Kejadian</label>
+                <input type="number" name="tahun" required defaultValue={new Date().getFullYear()} className="w-full p-2 lg:px-4 lg:py-3 text-black text-[11px] md:text-[13px] lg:text-[15px] xl:text-[17px] rounded-lg border border-gray-300 focus:border-[#936440] focus:ring-2 focus:ring-[#936440]/30 transition-all outline-none text-black"/>
+              </div>
+              <div>
+                <label className="block text-[12px] md:text-[14px] lg:text-[16px] xl:text-[18px] font-bold text-gray-700 mb-1">Deskripsi Lengkap</label>
+                <textarea name="deskripsi" required placeholder="Ceritakan detail kejadian secara lengkap..." className="w-full p-2 lg:px-4 lg:py-3 text-black text-[11px] md:text-[13px] lg:text-[15px] xl:text-[17px] rounded-lg border border-gray-300 min-h-[100px] focus:border-[#936440] focus:ring-2 focus:ring-[#936440]/30 transition-all outline-none text-black"></textarea>
+              </div>
+              <div>
+                <label className="block text-[12px] md:text-[14px] lg:text-[16px] xl:text-[18px] font-bold text-gray-700 mb-1">Unggah Foto (Bisa lebih dari 1)</label>
+                <input type="file" name="foto" accept="image/*" multiple required className="w-full text-black text-[11px] md:text-[13px] lg:text-[15px] xl:text-[17px] p-2 lg:px-4 lg:py-3 rounded-lg border border-gray-300 bg-gray-50 file:mr-4 file:p-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] md:file:text-[12px] lg:file:text-[14px] file:font-bold file:bg-[#0B592F]/90 file:text-white file:cursor-pointer hover:file:bg-[#0B592F] transition-all text-gray-600 cursor-pointer"/>
+                <p className="text-[10px] md:text-[12px] text-[#936440] mt-1 italic">Note : Tahan tombol CTRL untuk memilih banyak foto di folder.</p>
+              </div>
+              <button type="submit" disabled={isLoadingProcess} className={`w-full py-3 md:py-4 text-[12px] md:text-[14px] lg:text-[16px] rounded-xl text-white font-black uppercase tracking-widest md:mt-2 transition-all duration-300 cursor-pointer ${isLoadingProcess ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#0B592F]/90 hover:bg-[#0B592F] hover:shadow-lg active:scale-95'}`}>
+                {isLoadingProcess ? 'Menyimpan...' : 'Terbitkan Berita'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
