@@ -89,7 +89,7 @@ export default async function AdminLayout({
   if (currentRole === 'super_admin' || currentRole === 'admin') {
     return (
       <div className="flex h-screen w-full bg-[#f4f1ea] overflow-hidden">
-        <aside className="w-72 bg-slate-900 text-white flex-col hidden md:flex shrink-0">
+        <aside className="w-72 bg-slate-900 text-white flex-col hidden md:flex font-sans shrink-0">
           <div className="p-6 flex flex-col justify-center text-center lg:text-left leading-tight">
             <h1 className="text-white text-[20px] lg:text-[24px] font-bold">JAGAWARA ARENTA</h1>
             <h3 className="text-white text-[20px] lg:text-[24px] font-extrabold"><span className="text-blue-500">Admin</span> Dashboard</h3>
@@ -110,8 +110,8 @@ export default async function AdminLayout({
             <Link href="/admin/export-data" className="block py-3 px-4 rounded transition duration-200 bg-blue-600 shadow-md font-semibold active:scale-90">
               Export Data
             </Link>
-            <Link href="#" className="block py-3 px-4 rounded transition duration-200 hover:bg-slate-800 text-slate-300">
-              Manajemen Notifikasi
+            <Link href="/admin/monitoring" className="block py-3 px-4 rounded transition duration-200 hover:bg-slate-800 text-slate-300">
+              Monitoring Aren
             </Link>
           </nav>
           <div className="p-4 border-t border-slate-800">
