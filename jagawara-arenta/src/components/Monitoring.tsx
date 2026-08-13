@@ -59,7 +59,7 @@ export default function Monitoring(){
             fetchLiveSensor();
         }, 15000);
         return () => clearInterval(intervalId)
-    })
+    }, [])
 
     const handleKlikBaris = (lat: number, lng: number) => {
         setTitikFokus({ lat, lng });
@@ -69,14 +69,14 @@ export default function Monitoring(){
     return(
         <section className="flex flex-col gap-8 w-full">
             <div className="flex flex-col bg-white rounded-xl shadow-lg border-2 border-[#936440]/60 overflow-hidden h-full">
-                <div className="p-4 border-b border-[#936440]/20 bg-gray-50/50 -mb-4 justify-between items-center">
+                <div className="p-4 border-b border-[#936440]/20 bg-gray-50/50 -mb-4 flex justify-between items-center">
                     <div>
                         <span className="text-[20px] font-bold text-[#0B592F] leading-tight block">Sensor Data Lapangan</span>
                         <span className="text-[14px] text-[#936440] leading-tight">Live monitoring status data</span>
                     </div>
-                    <div className="flex items-center gap-2 px-3 py-1 bg-red-50 border border-red-100 rounded-full">
-                        <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                        <span className="text-[10px] font bold text-red-600 uppercase tracking wider">Live Update</span>
+                    <div className="flex items-center gap-2 px-3 py-1 bg-green-50 border border-green-100 rounded-full">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span className="text-[10px] font bold text-green-600 uppercase tracking wider">Live Update</span>
                     </div>
                 </div>
                 
@@ -100,6 +100,12 @@ export default function Monitoring(){
                                 <tr>
                                     <td colSpan={9} className="py-8 text-center text-[#936440] font-semibold animate-pulse">
                                         Menarik data langsung dari lereng...
+                                    </td>
+                                </tr>
+                            ) : sensorData.length === 0 ? (
+                                <tr>
+                                    <td colSpan={9} className="py-8 text-center text-gray-500 font-semibold">
+                                        Belum ada data sensor yang masuk.
                                     </td>
                                 </tr>
                             ) : (

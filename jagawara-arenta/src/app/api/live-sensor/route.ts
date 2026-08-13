@@ -25,7 +25,7 @@ export async function GET() {
           kemiringan,
           getaran,
           baterai,
-          status_baterai,
+          status_daya,
           created_at
         )
       `)
@@ -55,7 +55,7 @@ export async function GET() {
         status: statusAlat,
         statusColor: statusColor,
         battery: latestSensor ? latestSensor.baterai : 0,
-        batteryStatus: latestSensor && latestSensor.status_baterai ? latestSensor.status_baterai : "Discharge",
+        batteryStatus: latestSensor && latestSensor.status_daya ? latestSensor.status_daya : "Discharge",
         curah_hujan: latestSensor ? latestSensor.curah_hujan : 0,
         kelembapan: latestSensor ? latestSensor.kelembapan : 0,
         kemiringan: latestSensor ? latestSensor.kemiringan : 0,
