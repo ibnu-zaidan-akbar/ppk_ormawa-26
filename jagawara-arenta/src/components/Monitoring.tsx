@@ -155,7 +155,7 @@ export default function Monitoring(){
                     </div>
                 </div>
                 <div className="w-full h-[450px] relative z-0 rounded-b-xl overflow-hidden">
-                    <EquipmentMap titikFokus={titikFokus}/>
+                    <EquipmentMap titikFokus={titikFokus} dataLokasi={sensorData}/>
                 </div>
             </div>
         </section>

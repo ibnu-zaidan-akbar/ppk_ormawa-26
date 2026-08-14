@@ -24,23 +24,30 @@ function KameraPeta({ titikFokus }: { titikFokus: { lat: number; lng: number } |
     return null;
 }
 
-export default function EquipmentMap({ titikFokus }: { titikFokus: { lat: number; lng: number } | null }) {
-    const mapCenter: [number, number] = [-7.187153, 107.284926]; 
-    const devices = [                   // dummy
-        { id: 1, name: "Kantor Kepala Desa Cipelah", location: [-7.187398, 107.283043] },
-        { id: 2, name: "Curug Cipelah", location: [-7.195821, 107.261151] },
-    ];
+interface SensorData {
+    id: string;
+    station: string;
+    lat: number;
+    lng: number;
+    status: string;
+    statusColor: string;
+}
 
+export default function EquipmentMap({ titikFokus, dataLokasi }: { titikFokus: { lat: number; lng: number } | null ; dataLokasi: SensorData[]; }) {
+    const mapCenter: [number, number] = [-7.187153, 107.284926];
     return (
         <div className="w-full h-full z-0 relative overflow-hidden">
             <MapContainer center={mapCenter} zoom={18} maxZoom={21} scrollWheelZoom={false} touchZoom={true} className="w-full h-full z-0">
                 <TileLayer attribution='&copy; <a href="https://www.esri.com/">Esri</a>' url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" maxZoom={21} maxNativeZoom={18}/>
                 <KameraPeta titikFokus={titikFokus}/>
-                {devices.map((device) => (
-                    <Marker key={device.id} position={device.location as [number, number]} icon={customIcon}>
+                {dataLokasi.map((device) => (
+                    <Marker key={device.id} position={[device.lat, device.lng]} icon={customIcon}>
                         <Popup>
-                            <span className="font-bold text-[#0B592F]">{device.name}</span> <br /> 
-                            <span className="text-xs text-gray-600">Klik tombol di bawah untuk detail.</span>
+                            <div className="flex flex-col gap-1">
+                                <span className={`text-[10px] text-white px-2 py-1 rounded-full font-bold w-fit ${device.statusColor}`}>{device.status}</span>
+                                <span className="font-bold text-[#0B592F]">{device.station}</span>
+                                {/* <span className="text-xs text-gray-600">Klik tombol di bawah untuk detail.</span> */}
+                            </div>
                         </Popup>
                     </Marker>
                 ))}
