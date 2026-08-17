@@ -52,7 +52,15 @@ export async function GET() {
         else if (statusAlat === 'AWAS') statusColor = 'bg-[#FF1100]';
       } else {
         statusAlat = titik.kategori ? titik.kategori.toUpperCase() : 'TITIK LOKASI';
-        statusColor = 'bg-blue-500'
+        if (statusAlat === 'POSKO') {
+              statusColor = 'bg-blue-500';
+          } else if (statusAlat === 'KESEHATAN') {
+              statusColor = 'bg-green-500';
+          } else if (statusAlat === 'RAWAN LONGSOR') {
+              statusColor = 'bg-[#8B4513]';
+          } else {
+              statusColor = 'bg-gray-500';
+          }
       }
 
       return {
