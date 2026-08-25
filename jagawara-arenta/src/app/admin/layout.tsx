@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/src/utils/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'
 import Link from 'next/link'
+import AdminNav from './adminNav'
 
 export default async function AdminLayout({
   children,
@@ -100,26 +101,17 @@ export default async function AdminLayout({
             <p className="text-[14px] font-medium truncate text-blue-300">Terverifikasi</p>
           </div>
 
-          <nav className="flex-1 p-4 space-y-2 mt-2">
-            <Link href="/admin" className="block py-3 px-4 rounded transition duration-200 bg-blue-600 shadow-md font-semibold active:scale-90">
-              Dashboard Admin
-            </Link>
-            <Link href="/admin/kelola-berita" className="block py-3 px-4 rounded transition duration-200 bg-blue-600 shadow-md font-semibold active:scale-90">
-              Kelola Histori Bencana
-            </Link>
-            <Link href="/admin/export-data" className="block py-3 px-4 rounded transition duration-200 bg-blue-600 shadow-md font-semibold active:scale-90">
-              Export Data
-            </Link>
-            <Link href="/admin/monitoring" className="block py-3 px-4 rounded transition duration-200 hover:bg-slate-800 text-slate-300">
-              Monitoring Aren
-            </Link>
-          </nav>
+          <AdminNav/>
+
           <div className="p-4 border-t border-slate-800">
-            <button className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition-colors cursor-pointer active:scale-90">
-              Logout Sistem
-            </button>
+            <form action={handleLogout}>
+              <button type="submit" className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition-colors cursor-pointer active:scale-90">
+                Logout Sistem
+              </button>
+            </form>
           </div>
         </aside>
+
         <main className="flex-1 overflow-y-auto">
           {children}
         </main>
