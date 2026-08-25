@@ -4,13 +4,6 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import "leaflet/dist/leaflet.css"
 
-const customIcon = new L.Icon({
-    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-    iconShadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41]
-});
-
 const getClassicPin = (warnaBg: string) => {
     let hexColor = '#9ca3af'; 
     if (warnaBg.includes('#')) {

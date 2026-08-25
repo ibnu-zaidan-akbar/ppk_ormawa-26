@@ -13,11 +13,16 @@ const status = [
     {id: 1, name: "NORMAL", color: "bg-[#8CA70A]"},
     {id: 2, name: "WASPADA", color: "bg-[#EEB627]"},
     {id: 3, name: "SIAGA", color: "bg-[#DF6F3B]"},
-    {id: 4, name: "AWAS", color: "bg-[#FF1100]"}
+    {id: 4, name: "AWAS", color: "bg-[#FF1100]"},
+    {id: 5, name: "POSKO", color: "bg-blue-500"},
+    {id: 6, name: "KESEHATAN", color: "bg-green-500"},
+    {id: 7, name: "RAWAN LONGSOR", color: "bg-[#8B4513]"}
 ];
 
 interface SensorData {
     id: string;
+    node_id: string;
+    kategori: string;
     station: string;
     lat: number;
     lng: number;
@@ -118,19 +123,28 @@ export default function Monitoring(){
                                             {data.status}
                                         </span>
                                     </td>
-                                    <td className="py-4 px-4 min-w-[120px]">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-full bg-gray-200 rounded-full h-2">
-                                                <div className={`h-2 rounded-full ${data.battery > 50 ? 'bg-[#8CA70A]' : 'bg-red-500'}`} style={{ width: `${data.battery}%` }}></div>
-                                            </div>
-                                            <span className="text-xs font-bold text-gray-700 w-8">{data.battery}%</span>
-                                        </div>
-                                    </td>
-                                    <td className="py-4 px-4 font-bold text-[#936440]">{data.batteryStatus}</td>
-                                    <td className="py-4 px-4 font-semibold text-gray-700">{data.curah_hujan} mm/jam</td>
-                                    <td className="py-4 px-4 font-bold text-[#DF6F3B]">{data.kelembapan}%</td>
-                                    <td className="py-4 px-4 font-semibold text-gray-700">{data.kemiringan} °</td>
-                                    <td className="py-4 px-4 font-semibold text-gray-700">{data.getaran} g</td>
+
+                                    {data.kategori === 'EWS' ? (
+                                        <>
+                                            <td className="py-4 px-4 min-w-[120px]">
+                                                <div className="flex items-center gap-2">
+                                                    <div className="w-full bg-gray-200 rounded-full h-2">
+                                                        <div className={`h-2 rounded-full ${data.battery > 50 ? 'bg-[#8CA70A]' : 'bg-red-500'}`} style={{ width: `${data.battery}%` }}></div>
+                                                    </div>
+                                                    <span className="text-xs font-bold text-gray-700 w-8">{data.battery}%</span>
+                                                </div>
+                                            </td>
+                                            <td className="py-4 px-4 font-bold text-[#936440]">{data.batteryStatus}</td>
+                                            <td className="py-4 px-4 font-semibold text-gray-700">{data.curah_hujan} mm/jam</td>
+                                            <td className="py-4 px-4 font-bold text-[#DF6F3B]">{data.kelembapan}%</td>
+                                            <td className="py-4 px-4 font-semibold text-gray-700">{data.kemiringan} °</td>
+                                            <td className="py-4 px-4 font-semibold text-gray-700">{data.getaran} g</td>
+                                        </>
+                                    ) : (
+                                        <td colSpan={6} className="py-4 px-4 text-center text-gray-400 font-semibold italic bg-gray-50/50">
+                                            Fasilitas Statis (Tanpa Sensor)
+                                        </td>
+                                    )}
                                 </tr>
                                 ))
                             )}
