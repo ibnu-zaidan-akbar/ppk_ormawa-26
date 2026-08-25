@@ -338,7 +338,12 @@ export default function MasterDashboard() {
                   {titikList.map((titik) => (
                     <tr key={titik.id} className="hover:bg-gray-50">
                       <td className="p-4 font-bold">
-                          <span className={`px-2 py-1 text-xs rounded-md ${titik.kategori === 'EWS' ? 'bg-red-100 text-red-700' : titik.kategori === 'EVAKUASI' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
+                          <span className={`px-2 py-1 text-xs rounded-md ${
+                              titik.kategori === 'EWS' ? 'bg-red-100 text-red-700' :
+                              titik.kategori === 'POSKO' ? 'bg-blue-100 text-blue-700' : 
+                              titik.kategori === 'KESEHATAN' ? 'bg-green-100 text-green-700' :
+                              titik.kategori === 'RAWAN LONGSOR' ? 'bg-amber-100 text-[#8B4513]' :
+                              'bg-gray-100 text-gray-700'}`}>
                             {titik.kategori}
                           </span>
                         </td>
@@ -429,8 +434,9 @@ export default function MasterDashboard() {
                   className="w-full p-3 rounded-lg border border-gray-300 focus:border-[#936440] focus:ring-2 outline-none font-semibold text-gray-800"
                 >
                   <option value="EWS">🚨 Tiang Sensor (EWS)</option>
-                  <option value="EVAKUASI">🏃‍♂️ Jalur Evakuasi</option>
                   <option value="POSKO">⛺ Posko Aman</option>
+                  <option value="KESEHATAN">🏥 Fasilitas Kesehatan</option>
+                  <option value="RAWAN LONGSOR">⚠️ Zona Rawan Longsor</option>
                 </select>
               </div>
 
