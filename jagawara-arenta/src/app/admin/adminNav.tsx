@@ -13,7 +13,7 @@ export default function AdminNav() {
   ]
 
   return (
-    <nav className="flex-1 p-4 space-y-2 mt-2">
+    <nav className="flex-1 p-4 space-y-2">
       {menuItems.map((item) => {
         const isActive = pathname === item.href
 

@@ -95,12 +95,7 @@ export default async function AdminLayout({
             <h1 className="text-white text-[20px] lg:text-[24px] font-bold">JAGAWARA ARENTA</h1>
             <h3 className="text-white text-[20px] lg:text-[24px] font-extrabold"><span className="text-blue-500">Admin</span> Dashboard</h3>
           </div>
-          
-          <div className="px-6 py-4 bg-slate-800/50 border-b border-slate-800 leading-snug">
-            <p className="text-[12px] text-slate-400 uppercase tracking-wider font-bold mb-1">Status Akses:</p>
-            <p className="text-[14px] font-medium truncate text-blue-300">Terverifikasi</p>
-          </div>
-
+      
           <AdminNav/>
 
           <div className="p-4 border-t border-slate-800">
