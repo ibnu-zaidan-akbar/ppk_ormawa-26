@@ -144,17 +144,16 @@ export default function AdminBeritaPage() {
   }
 
   return (
-    <div className="bg-[#f4f1ea] min-h-screen px-4 md:px-8 lg:px-10 py-10 font-sans">
-      <div className="w-full mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-          <div>
-            <h1 className="text-center md:text-start text-[24px] md:text-[28px] lg:text-[32px] font-black text-[#0B592F] uppercase tracking-wider">Kelola Histori Bencana</h1>
-            <p className="text-center md:text-start text-[12px] md:text-[14px] lg:text-[16px] text-[#936440]">Manajemen arsip kejadian untuk sistem informasi desa.</p>
-          </div>
-          <button onClick={() => setIsAddModalOpen(true)} className="bg-[#0B592F] hover:bg-[#0B592F]/80 text-[12px] md:text-[14px] lg:text-[16px] text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all active:scale-95 cursor-pointer">
-            + Tambah Catatan Baru
-          </button>
+    <div className="bg-gray-100 min-h-screen px-4 md:px-8 lg:px-10 py-10 font-sans">
+      <div className="w-full mx-auto flex flex-col gap-2">
+        <div>
+          <h1 className="text-center md:text-start text-[28px] md:text-[32px] lg:text-[36px] font-black text-black uppercase tracking-wider">Kelola Histori Bencana</h1>
+          <p className="text-center md:text-start text-[12px] md:text-[16px] lg:text-[20px] text-gray-500">Manajemen arsip kejadian untuk sistem informasi desa.</p>
         </div>
+
+        <button onClick={() => setIsAddModalOpen(true)} className="bg-[#0B592F] hover:bg-emerald-800 w-fit text-[12px] md:text-[14px] lg:text-[16px] text-white font-bold mt-4 py-3 px-6 rounded-xl shadow-lg transition-all active:scale-95 cursor-pointer">
+          + Tambah Catatan Baru
+        </button>
 
         {pesan && (
           <div className={`p-4 mb-6 rounded-lg font-bold text-center shadow-sm ${pesan.type === 'sukses' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
@@ -199,9 +198,9 @@ export default function AdminBeritaPage() {
 
       {isAddModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-4xl bg-white p-6 md:p-8 rounded-2xl shadow-2xl border-2 border-[#936440]/60 max-h-[90vh] overflow-y-auto">
+          <div className="w-full max-w-4xl bg-white p-6 md:p-8 rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-[20px] md:text-[22px] lg:text-[24px] xl:text-[26px] font-black text-[#0B592F] text-center uppercase tracking-wider">Input Histori Baru</h2>
+              <h2 className="text-[20px] md:text-[22px] lg:text-[24px] xl:text-[26px] font-black text-black text-center uppercase tracking-wider">Input Histori Baru</h2>
               <button onClick={() => setIsAddModalOpen(false)} className="text-gray-400 hover:text-black font-bold text-[28px] lg:text-[36px] hover:scale-110 active:scale-90">&times;</button>
             </div>
             <form onSubmit={handleAddSubmit} className="space-y-4">
@@ -232,9 +231,9 @@ export default function AdminBeritaPage() {
 
       {isEditModalOpen && editData && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-4xl bg-white p-6 md:p-8 rounded-2xl shadow-2xl border-2 border-amber-500/60 max-h-[90vh] overflow-y-auto">
+          <div className="w-full max-w-4xl bg-white p-6 md:p-8 rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between leading-none items-center mb-4">
-              <h2 className="text-[20px] md:text-[22px] lg:text-[24px] xl:text-[26px] font-black text-amber-600 uppercase tracking-wider">Edit Catatan</h2>
+              <h2 className="text-[20px] md:text-[22px] lg:text-[24px] xl:text-[26px] font-black text-black uppercase tracking-wider">Edit Catatan</h2>
               <button onClick={() => setIsEditModalOpen(false)} className="text-gray-400 hover:text-black font-bold text-[28px] lg:text-[36px] hover:scale-110 active:scale-90">&times;</button>
             </div>
             <form onSubmit={handleEditSubmit} className="space-y-4">
@@ -270,7 +269,7 @@ export default function AdminBeritaPage() {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-[10px] md:text-[12px] lg:text-[14px] xl:text-[16px] -mt-2 text-red-500 italic">Semua foto lama telah dihapus. Wajib tambahkan foto baru di bawah.</p>
+                  <p className="text-[8px] md:text-[10px] lg:text-[12px] xl:text-[14px] -mt-2 text-red-500 italic">Semua foto lama telah dihapus. Wajib tambahkan foto baru di bawah.</p>
                 )}
               </div>
 
@@ -289,7 +288,7 @@ export default function AdminBeritaPage() {
 
       {isDeleteModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-white p-6 md:p-8 rounded-2xl shadow-2xl border-b-4 border-red-700 text-center">
+          <div className="w-full max-w-md bg-white p-6 md:p-8 rounded-2xl shadow-2xl border-b-4 border-r-4 border-red-700 text-center">
             <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-red-200 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-[24px] md:text-[28px] lg:text-[32px]">⚠️</div>
             <h2 className="text-[18px] md:text-[20px] lg:text-[24px] font-black text-black mb-2 leading-tight">Hapus Catatan?</h2>
             <p className="text-gray-700 mb-4 text-[12px] md:text-[14px] lg:text-[16px]">Apakah Anda yakin ingin menghapus berita ini secara permanen?</p>
