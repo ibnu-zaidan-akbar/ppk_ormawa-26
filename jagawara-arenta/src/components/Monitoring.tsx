@@ -13,10 +13,7 @@ const status = [
     {id: 1, name: "NORMAL", color: "bg-[#8CA70A]"},
     {id: 2, name: "WASPADA", color: "bg-[#EEB627]"},
     {id: 3, name: "SIAGA", color: "bg-[#DF6F3B]"},
-    {id: 4, name: "AWAS", color: "bg-[#FF1100]"},
-    {id: 5, name: "POSKO", color: "bg-blue-500"},
-    {id: 6, name: "KESEHATAN", color: "bg-green-500"},
-    {id: 7, name: "RAWAN LONGSOR", color: "bg-[#8B4513]"}
+    {id: 4, name: "AWAS", color: "bg-[#FF1100]"}
 ];
 
 interface SensorData {
