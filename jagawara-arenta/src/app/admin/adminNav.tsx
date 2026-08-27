@@ -9,7 +9,8 @@ export default function AdminNav() {
   const menuItems = [
     { href: '/admin', label: 'Dashboard Admin' },
     { href: '/admin/kelola-berita', label: 'Kelola Histori Bencana' },
-    { href: '/admin/export-data', label: 'Monitoring & Export Data' },
+    { href: '/admin/export-data', label: 'Monitoring Sensor & Export Data' },
+    { href: '/admin/monitoring-aren', label: 'Monitoring Survival Rate Aren' },
   ]
 
   return (

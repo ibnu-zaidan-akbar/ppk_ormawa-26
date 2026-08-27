@@ -139,7 +139,7 @@ export default function MonitoringSensorAdmin() {
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <div>
-            <h1 className="text-[24px] md:text-[28px] font-extrabold text-black uppercase tracking-tight">Monitoring Sensor Admin</h1>
+            <h1 className="text-[24px] md:text-[28px] font-extrabold text-black uppercase tracking-tight">Monitoring Sensor</h1>
             <p className="text-gray-500 font-medium mt-1">
               Data ditarik otomatis setiap 1 menit. <span className="text-gray-400 text-sm">(Terakhir update: {waktuRefresh})</span>
             </p>

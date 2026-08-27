@@ -89,7 +89,7 @@ export default async function AdminLayout({
 
   if (currentRole === 'super_admin' || currentRole === 'admin') {
     return (
-      <div className="flex h-screen w-full bg-[#f4f1ea] overflow-hidden">
+      <div className="flex h-screen w-full bg-gray-100 overflow-hidden">
         <aside className="w-72 bg-slate-900 text-white flex-col hidden md:flex font-sans shrink-0">
           <div className="p-6 flex flex-col justify-center text-center lg:text-left leading-tight">
             <h1 className="text-white text-[20px] lg:text-[24px] font-bold">JAGAWARA ARENTA</h1>
