@@ -151,7 +151,7 @@ export default function Monitoring(){
             </div>
 
             <div ref={petaRef} className="flex flex-col bg-white rounded-xl shadow-lg border-2 border-[#936440]/60">
-                <div className="flex flex-col justify-between p-4 gap-2 border-b border-[#936440]/20 bg-gray-50/50 rounded-t-xl">
+                <div className="flex flex-col md:flex-row justify-between p-4 gap-2 border-b border-[#936440]/20 bg-gray-50/50 rounded-t-xl">
                     <div className="flex flex-col">
                         <span className="text-[20px] font-bold text-[#0B592F] leading-tight">Peta Desa</span>
                         <span className="text-[14px] text-[#936440] leading-tight">Klik Titik untuk Detail Sensor</span>

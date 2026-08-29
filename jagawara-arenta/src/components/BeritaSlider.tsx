@@ -17,7 +17,7 @@ export default function BeritaSlider({ beritaData }: { beritaData: any[] }) {
     <div className="w-full flex flex-col items-center">
       <div className="flex items-center justify-between w-full max-w-md md:max-w-3xl xl:max-w-5xl mx-auto md:gap-6">
         {/* Tombol Kiri */}
-        <button onClick={() => swiperRef.current?.slidePrev()} className="transition-all duration-300 hover:scale-110 active:scale-90 animate-nudge-left cursor-pointer">
+        <button onClick={() => swiperRef.current?.slidePrev()} className="-ml-4 transition-all duration-300 hover:scale-110 active:scale-90 animate-nudge-left cursor-pointer">
           <svg viewBox="0 0 24 24" className="w-12 h-12 lg:w-20 lg:h-20 xl:w-24 xl:h-24 transition-colors hover:opacity-80">
             <path d="M19 18l-7-6 7-6v12z" fill="#936440" />
             <path d="M11 18l-7-6 7-6v12z" fill="#5F6282" />
@@ -35,7 +35,7 @@ export default function BeritaSlider({ beritaData }: { beritaData: any[] }) {
                   <div className="relative w-full h-60 md:h-92 xl:h-112 border-y-2 border-[#936440]">
                     <Image src={item.cover_foto} alt={item.judul} className="object-contain" fill sizes="(max-width: 768px) 100vw, 800px" priority={index === 0}/>
                   </div>
-                  <div className="flex flex-col px-4 py-3 min-h-[180px] md:min-h-[220px]">
+                  <div className="flex flex-col md:px-2 lg:px-4 py-3 min-h-[180px] md:min-h-[220px]">
                   <p className="p-2 text-[20px] md:text-[24px] font-bold text-[#936440] text-center leading-snug line-clamp-6">{item.judul}</p>
                   <p className="px-4 text-[14px] md:text-[16px] font-semibold text-black text-justify leading-snug line-clamp-6">{item.deskripsi}</p>
                   </div>
@@ -49,7 +49,7 @@ export default function BeritaSlider({ beritaData }: { beritaData: any[] }) {
         </div>
 
         {/* Tombol Kanan */}
-        <button onClick={() => swiperRef.current?.slideNext()} className="transition-all duration-300 hover:scale-110 active:scale-90 animate-nudge-right cursor-pointer">
+        <button onClick={() => swiperRef.current?.slideNext()} className="-mr-4 transition-all duration-300 hover:scale-110 active:scale-90 animate-nudge-right cursor-pointer">
           <svg viewBox="0 0 24 24" className="w-12 h-12 lg:w-20 lg:h-20 xl:w-24 xl:h-24 transition-colors hover:opacity-80">
             <path d="M5 6l7 6-7 6V6z" fill="#936440" className="transition-colors" />
             <path d="M13 6l7 6-7 6V6z" fill="#5F6282" />
