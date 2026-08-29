@@ -1,46 +1,10 @@
 import Image from "next/image";
 import Weather from "../components/weatherPrediction";
-import NotificationManager from "../components/Notification";
 
 import { client } from "@/src/sanity/lib/client";
 import { urlFor } from "@/src/sanity/lib/image";
 import BeritaSlider from "@/src/components/BeritaSlider";
 import Monitoring from "@/src/components/Monitoring";
-
-const status = [
-    {id: 1, name: "NORMAL", color: "bg-[#8CA70A]"},
-    {id: 2, name: "SIAGA", color: "bg-[#DF6F3B]"},
-    {id: 3, name: "WASPADA", color: "bg-[#EEB627]"},
-    {id: 4, name: "AWAS", color: "bg-[#FF1100]"}
-];
-
-// --- DATA DUMMY SENSOR TERBARU ---
-const sensorData = [
-  { 
-    station: 'Kantor Desa', 
-    id: 'PD-001', 
-    status: 'Normal',
-    statusColor: 'bg-[#8CA70A]', 
-    battery: 85, 
-    batteryStatus: 'Discharge', 
-    rain: '0 mm/jam', 
-    soilMoisture: 45, 
-    tilt: '0.1°', 
-    vibration: '0.01 g' 
-  },
-  { 
-    station: 'Curug', 
-    id: 'PD-002', 
-    status: 'Siaga',
-    statusColor: 'bg-[#DF6F3B]', 
-    battery: 42, 
-    batteryStatus: 'Charge', 
-    rain: '12 mm/jam', 
-    soilMoisture: 78, 
-    tilt: '1.2°', 
-    vibration: '0.05 g' 
-  },
-];
 
 export default async function Home() {
   const beritaQuery = `*[_type == "berita"] | order(_createdAt asc)`;
@@ -72,6 +36,7 @@ export default async function Home() {
         <section className="w-full drop-shadow-md">
             <Weather/>
         </section>
+        
         <Monitoring/>
 
         <section className="w-full py-4">
@@ -86,10 +51,7 @@ export default async function Home() {
             </div>
           )}
         </section>
-
       </main>
-      
-      <NotificationManager/>
     </div>
   );
 }
