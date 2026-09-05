@@ -17,6 +17,12 @@ export default async function Home() {
       cover_foto: item.galeri_foto && item.galeri_foto.length > 0 ? urlFor(item.galeri_foto[0]).url() : null
   }));
 
+  const lahanList = [
+    { _id: '1', nama_lahan: 'Lahan 1', jumlah_bibit: 150, survival_rate: 85.5 },
+    { _id: '2', nama_lahan: 'Lahan 2', jumlah_bibit: 200, survival_rate: 92.0 },
+    { _id: '3', nama_lahan: 'Lahan 3', jumlah_bibit: 120, survival_rate: 78.4 },
+  ]
+
   return (
     <div className="bg-[#f4f1ea] min-h-screen pb-16 font-sans">
       <div className="sticky top-0 z-50 p-2 lg:py-4 lg:px-8 bg-white w-full h-fit shadow-md border-b-[4px] border-[#0B592F] items-center flex justify-between lg:justify-start lg:gap-4">
@@ -38,6 +44,26 @@ export default async function Home() {
         </section>
         
         <Monitoring/>
+
+        <div className="grid grid-cols-3 justify-between">
+            {lahanList.map((lahan) => (
+                <div key={lahan._id} className="py-4 flex flex-col overflow-hidden">
+                    <h2 className="text-[20px] md:text-[24px] text-center font-black text-[#936440] uppercase">{lahan.nama_lahan}</h2>
+                    <div className="flex flex-col gap-4 items-center">
+                        <span className="text-xs md:text-sm text-center font-bold text-gray-500">Tingkat Keselamatan<br/> (Survival Rate)</span>
+                        <div className="bg-green-50 w-[84px] h-[84px] rounded-full p-4 flex justify-center items-center">
+                            <span className={`text-lg md:text-xl font-black ${lahan.survival_rate >= 80 ? 'text-green-600' : lahan.survival_rate >= 50 ? 'text-amber-600' : 'text-red-600'}`}>
+                                {lahan.survival_rate}%
+                            </span>
+                        </div>
+                        <div className="rounded-xl flex items-center gap-2">
+                            <span className="text-sm md:text-base font-bold text-gray-500">Total Bibit Ditanam: </span>
+                            <span className="text-lg md:text-xl font-black text-gray-800">{lahan.jumlah_bibit} Pohon</span>
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
 
         <section className="w-full py-4">
           <h2 className="py-4 text-[#0B592F] text-center text-[16px] md:text-[20px] lg:text-[24px] xl:text-[32px] leading-tight font-bold">Riwayat Bencana Desa Cipelah</h2>
