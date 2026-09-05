@@ -49,7 +49,7 @@ export default async function Home() {
         <Monitoring/>
 
         <section className="p-4 rounded-2xl">
-            <div className="mb-4 text-center">
+            <div className="text-center">
               <h2 className="text-[#0B592F] text-[16px] md:text-[20px] lg:text-[24px] xl:text-[32px] leading-tight font-bold">Pemantauan Konservasi Aren</h2>
               <p className="text-gray-500 text-sm">Status pertumbuhan dan tingkat keselamatan pohon di setiap lokasi Penanaman</p>
             </div>
@@ -59,7 +59,7 @@ export default async function Home() {
                     <div key={lahan._id} className="py-4 flex flex-col items-center">
                         <h2 className="text-[20px] md:text-[24px] text-center font-black text-[#936440]">{lahan.nama_lahan}</h2>
                         <div className="flex flex-col gap-4 items-center w-full">
-                            <div className="flex flex-col items-center mt-2">
+                            <div className="flex flex-col items-center">
                                 <span className="text-xs md:text-sm text-center font-bold text-gray-500 leading-tight mb-2">Tingkat Keselamatan<br/> (Survival Rate)</span>
                                 <div className={`w-[120px] h-[120px] rounded-full p-4 flex justify-center items-center shadow-inner ${lahan.survival_rate >= 80 ? 'bg-green-50 border-2 border-green-200' : lahan.survival_rate >= 50 ? 'bg-amber-50 border-2 border-amber-200' : 'bg-red-50 border-2 border-red-200'}`}>
                                     <span className={`text-xl md:text-2xl font-black ${lahan.survival_rate >= 80 ? 'text-green-600' : lahan.survival_rate >= 50 ? 'text-amber-600' : 'text-red-600'}`}>
@@ -69,12 +69,12 @@ export default async function Home() {
                             </div>
 
                             <div className="flex flex-col items-center gap-1 w-full text-center">
-                                <span className="text-sm font-bold text-gray-500">Total Bibit Ditanam: </span>
-                                <span className="text-lg md:text-xl font-black text-gray-800">{lahan.jumlah_bibit} Pohon</span>
+                                <span className="text-sm font-bold text-gray-500 leading-none">Total Pohon Ditanam: </span>
+                                <span className="text-lg md:text-xl font-black text-gray-800 leading-none">{lahan.jumlah_bibit} Pohon</span>
                             </div>
 
                             {lahan.foto_lahan && lahan.foto_lahan.length > 0 ? (
-                                <div className="w-full h-32 md:h-40 relative rounded-xl overflow-hidden shadow-inner border border-gray-200">
+                                <div className="w-full aspect-[2/1] relative rounded-xl overflow-hidden shadow-inner border border-gray-200">
                                     <Image 
                                       src={lahan.foto_lahan[0]} 
                                       alt={`Dokumentasi ${lahan.nama_lahan}`} 
