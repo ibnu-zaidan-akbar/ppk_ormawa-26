@@ -74,7 +74,7 @@ export default async function Home() {
                             </div>
 
                             {lahan.foto_lahan && lahan.foto_lahan.length > 0 ? (
-                                <div className="w-full aspect-[2/1] relative rounded-xl overflow-hidden shadow-inner border border-gray-200">
+                                <div className="w-full aspect-[3/2] relative rounded-xl overflow-hidden shadow-inner border border-gray-200">
                                     <Image 
                                       src={lahan.foto_lahan[0]} 
                                       alt={`Dokumentasi ${lahan.nama_lahan}`} 
