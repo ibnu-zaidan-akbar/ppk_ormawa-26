@@ -17,11 +17,14 @@ export default async function Home() {
       cover_foto: item.galeri_foto && item.galeri_foto.length > 0 ? urlFor(item.galeri_foto[0]).url() : null
   }));
 
-  const lahanList = [
-    { _id: '1', nama_lahan: 'Lahan 1', jumlah_bibit: 150, survival_rate: 85.5 },
-    { _id: '2', nama_lahan: 'Lahan 2', jumlah_bibit: 200, survival_rate: 92.0 },
-    { _id: '3', nama_lahan: 'Lahan 3', jumlah_bibit: 120, survival_rate: 78.4 },
-  ]
+  const arenQuery = `*[_type == "monitoringAren"] | order(nama_lahan asc) {
+    _id, 
+    nama_lahan, 
+    jumlah_bibit, 
+    survival_rate,
+    "foto_lahan": foto_lahan[].asset->url
+  }`;
+  const lahanList = await client.fetch(arenQuery, {}, { next: { revalidate: 60 } });
 
   return (
     <div className="bg-[#f4f1ea] min-h-screen pb-16 font-sans">
@@ -45,27 +48,53 @@ export default async function Home() {
         
         <Monitoring/>
 
-        <div className="grid grid-cols-3 justify-between">
-            {lahanList.map((lahan) => (
-                <div key={lahan._id} className="py-4 flex flex-col overflow-hidden">
-                    <h2 className="text-[20px] md:text-[24px] text-center font-black text-[#936440] uppercase">{lahan.nama_lahan}</h2>
-                    <div className="flex flex-col gap-4 items-center">
-                        <span className="text-xs md:text-sm text-center font-bold text-gray-500">Tingkat Keselamatan<br/> (Survival Rate)</span>
-                        <div className="bg-green-50 w-[84px] h-[84px] rounded-full p-4 flex justify-center items-center">
-                            <span className={`text-lg md:text-xl font-black ${lahan.survival_rate >= 80 ? 'text-green-600' : lahan.survival_rate >= 50 ? 'text-amber-600' : 'text-red-600'}`}>
-                                {lahan.survival_rate}%
-                            </span>
-                        </div>
-                        <div className="rounded-xl flex items-center gap-2">
-                            <span className="text-sm md:text-base font-bold text-gray-500">Total Bibit Ditanam: </span>
-                            <span className="text-lg md:text-xl font-black text-gray-800">{lahan.jumlah_bibit} Pohon</span>
+        <section className="p-4 rounded-2xl">
+            <div className="mb-4 text-center">
+              <h2 className="text-[#0B592F] text-[16px] md:text-[20px] lg:text-[24px] xl:text-[32px] leading-tight font-bold">Pemantauan Konservasi Aren</h2>
+              <p className="text-gray-500 text-sm">Status pertumbuhan dan tingkat keselamatan pohon di setiap lokasi Penanaman</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-between">
+                {lahanList.map((lahan: any) => (
+                    <div key={lahan._id} className="py-4 flex flex-col items-center">
+                        <h2 className="text-[20px] md:text-[24px] text-center font-black text-[#936440]">{lahan.nama_lahan}</h2>
+                        <div className="flex flex-col gap-4 items-center w-full">
+                            <div className="flex flex-col items-center mt-2">
+                                <span className="text-xs md:text-sm text-center font-bold text-gray-500 leading-tight mb-2">Tingkat Keselamatan<br/> (Survival Rate)</span>
+                                <div className={`w-[120px] h-[120px] rounded-full p-4 flex justify-center items-center shadow-inner ${lahan.survival_rate >= 80 ? 'bg-green-50 border-2 border-green-200' : lahan.survival_rate >= 50 ? 'bg-amber-50 border-2 border-amber-200' : 'bg-red-50 border-2 border-red-200'}`}>
+                                    <span className={`text-xl md:text-2xl font-black ${lahan.survival_rate >= 80 ? 'text-green-600' : lahan.survival_rate >= 50 ? 'text-amber-600' : 'text-red-600'}`}>
+                                        {lahan.survival_rate}%
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col items-center gap-1 w-full text-center">
+                                <span className="text-sm font-bold text-gray-500">Total Bibit Ditanam: </span>
+                                <span className="text-lg md:text-xl font-black text-gray-800">{lahan.jumlah_bibit} Pohon</span>
+                            </div>
+
+                            {lahan.foto_lahan && lahan.foto_lahan.length > 0 ? (
+                                <div className="w-full h-32 md:h-40 relative rounded-xl overflow-hidden shadow-inner border border-gray-200">
+                                    <Image 
+                                      src={lahan.foto_lahan[0]} 
+                                      alt={`Dokumentasi ${lahan.nama_lahan}`} 
+                                      fill 
+                                      className="object-cover hover:scale-105 transition-transform duration-500"
+                                    />
+                                </div>
+                            ) : (
+                                <div className="w-full h-32 md:h-40 bg-gray-100 rounded-xl flex items-center justify-center border-2 border-dashed border-gray-300">
+                                    <span className="text-xs text-gray-400 font-medium italic">Belum ada foto</span>
+                                </div>
+                            )}
+                            
                         </div>
                     </div>
-                </div>
-            ))}
-        </div>
+                ))}
+            </div>
+        </section>
 
-        <section className="w-full py-4">
+        <section className="w-full px-4">
           <h2 className="py-4 text-[#0B592F] text-center text-[16px] md:text-[20px] lg:text-[24px] xl:text-[32px] leading-tight font-bold">Riwayat Bencana Desa Cipelah</h2>
           {beritaData && beritaData.length > 0 ? (
             <BeritaSlider beritaData={beritaData} />
