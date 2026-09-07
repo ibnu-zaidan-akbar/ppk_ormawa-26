@@ -111,29 +111,30 @@ export default function MonitoringAren() {
             ) : (
             <div className="flex flex-col gap-4 mt-4">
               {lahanList.map((lahan) => (
-                <div key={lahan._id} className="py-6 px-4 md:px-6 bg-white rounded-2xl shadow-md border-l-8 border-[#0B592F] grid grid-cols-1 md:grid-cols-[4fr_1fr] gap-6 overflow-hidden">
-                    <div className="flex flex-col justify-between gap-4">
-                      <div>
-                        <h2 className="text-[20px] md:text-[24px] font-black text-[#936440] uppercase mb-1">{lahan.nama_lahan}</h2>
+                <div key={lahan._id} className="py-4 px-4 md:px-6 bg-white rounded-2xl shadow-md border-l-8 border-[#0B592F] grid grid-cols-1 md:grid-cols-[4fr_1fr] gap-6 overflow-hidden">
+                    <div className="flex gap-4">
                         {lahan.foto_lahan && lahan.foto_lahan.length > 0 ? (
-                            <div className="flex gap-2 mt-2 overflow-x-auto pb-2">
+                          <div className="flex gap-2 mt-2 overflow-x-auto pb-2">
                                 {lahan.foto_lahan.map((foto) => (
-                                    <img key={foto.key} src={foto.url} alt="Lahan" className="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg border border-gray-200 shadow-sm"/>
+                                  <img key={foto.key} src={foto.url} alt="Lahan" className="w-48 h-32 md:w-56 md:h-40 object-cover rounded-lg border border-gray-200 shadow-sm"/>
                                 ))}
                             </div>
                         ) : (
-                            <span className="text-xs italic text-gray-400">Belum ada foto dokumentasi</span>
+                          <span className="text-xs italic text-gray-400">Belum ada foto dokumentasi</span>
                         )}
-                      </div>
+                        
+                      <div className="flex flex-col">
+                        <h2 className="text-[20px] md:text-[24px] font-black text-[#936440] uppercase">{lahan.nama_lahan}</h2>
 
-                      <div className="rounded-xl flex items-center gap-2 bg-gray-50 p-3 border border-gray-100 w-fit">
-                          <span className="text-sm md:text-base font-bold text-gray-500">Total Bibit Ditanam: </span>
-                          <span className="text-lg md:text-xl font-black text-gray-800">{lahan.jumlah_bibit} Pohon</span>
+                        <div className="rounded-xl flex items-center gap-2 bg-gray-50 p-2 border border-gray-100 w-fit">
+                            <span className="text-sm md:text-base font-bold text-gray-500">Total Bibit Ditanam: </span>
+                            <span className="text-lg md:text-xl font-black text-gray-800">{lahan.jumlah_bibit} Pohon</span>
+                        </div>
+
+                        <button onClick={() => openEditModal(lahan)} className="w-fit px-4 py-2 bg-amber-100 text-amber-700 hover:bg-amber-200 rounded-lg font-bold text-sm transition-colors mt-2">
+                            Edit Data Lahan
+                        </button>
                       </div>
-                          
-                      <button onClick={() => openEditModal(lahan)} className="w-fit px-5 py-2 bg-amber-100 text-amber-700 hover:bg-amber-200 rounded-lg font-bold text-sm transition-colors mt-2">
-                          Edit Data Lahan
-                      </button>
                     </div>
 
                     <div className="flex flex-col gap-2 items-center justify-center p-4 rounded-xl">
