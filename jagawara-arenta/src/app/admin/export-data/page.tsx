@@ -25,20 +25,17 @@ export default function MonitoringSensorAdmin() {
   const fetchSensorData = async () => {
     setIsLoading(true);
     
-    // Inisialisasi koneksi ke Supabase
     const supabase = createBrowserClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
     
-    // Logika: Ambil data terbaru di 1 menit terakhir
     const satuMenitLalu = new Date(Date.now() - 60000).toISOString();
     
-    // 1. UBAH DI SINI: Ganti 'nama_tabel_kamu' dengan nama tabel asli di Supabase
     const { data, error } = await supabase
-      .from('nama_tabel_kamu') // <--- GANTI NAMA TABELNYA DI SINI
+      .from('sensor_data')
       .select('*')
-      .gte('created_at', satuMenitLalu) // Pastikan nama kolom tanggalnya 'created_at'
+      .gte('created_at', satuMenitLalu)
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -47,30 +44,25 @@ export default function MonitoringSensorAdmin() {
 
     if (data) {
       const formattedData = data.map((item: any) => {
-        
-        // 2. UBAH DI SINI: Ganti 'node_id' dengan nama kolom ID EWS di Supabase-mu
-        let namaLokasi = item.node_id; // <--- GANTI 'node_id'
-        
-        // Pastikan 'EWS_01' sesuai dengan isi datanya di Supabase
+        let namaLokasi = item.node_id;
         if (namaLokasi === 'EWS_01') namaLokasi = 'EWS Pasirnangka';
-        else if (namaLokasi === 'EWS_02') namaLokasi = 'EWS Cisabuk';
-        else if (namaLokasi === 'EWS_03') namaLokasi = 'EWS Gunung Leutik';
+        else if (namaLokasi === 'EWS_02') namaLokasi = 'EWS Gunung Leutik';
+        else if (namaLokasi === 'EWS_03') namaLokasi = 'EWS Cisabuk';
 
         return {
-          // 3. UBAH DI SINI: Cocokkan 'item.nama_kolom' dengan yang ada di Supabase
-          id_log: item.id,                                // <--- Ganti 'id'
-          waktu: new Date(item.created_at).toLocaleTimeString('id-ID'), // <--- Ganti 'created_at'
+          id_log: item.id || crypto.randomUUID(), 
+          waktu: new Date(item.created_at).toLocaleTimeString('id-ID'),
           station: namaLokasi,
-          id_alat: item.node_id,                          // <--- Ganti 'node_id'
-          status: item.status || 'Normal',                // <--- Ganti 'status'
-          battery: item.baterai || 0,                     // <--- Ganti 'baterai'
-          rain: `${item.curah_hujan || 0} mm/jam`,        // <--- Ganti 'curah_hujan'
-          soilMoisture: item.kelembapan || 0,             // <--- Ganti 'kelembapan'
-          tilt: `${item.kemiringan || 0}°`,               // <--- Ganti 'kemiringan'
-          vibration: `${item.getaran || 0} g`             // <--- Ganti 'getaran'
+          id_alat: item.node_id,
+          status: item.status ? item.status.toUpperCase() : 'NORMAL',
+          battery: item.baterai || 0,
+          rain: `${item.curah_hujan || 0} mm/jam`,
+          soilMoisture: item.kelembapan || 0,
+          tilt: `${item.kemiringan || 0}°`,
+          vibration: `${item.getaran || 0} g`
         };
       });
-      
+
       setDataSensor(formattedData);
     }
 
@@ -122,7 +114,6 @@ export default function MonitoringSensorAdmin() {
 
     const csvContent = "data:text/csv;charset=utf-8," + csvRows.join("\n");
     const encodedUri = encodeURI(csvContent);
-    
     const fileName = selectedEWS === "Semua" ? "Semua_EWS" : selectedEWS;
     
     const link = document.createElement("a");
@@ -136,7 +127,6 @@ export default function MonitoringSensorAdmin() {
   return (
     <div className="bg-gray-50 min-h-screen p-4 md:p-8 font-sans text-black">
       <div className="max-w-[1480px] mx-auto space-y-8">
-        
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <div>
             <h1 className="text-[24px] md:text-[28px] font-extrabold text-black uppercase tracking-tight">Monitoring Sensor</h1>
