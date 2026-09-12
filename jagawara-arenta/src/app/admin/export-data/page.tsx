@@ -194,9 +194,9 @@ export default function MonitoringSensorAdmin() {
                       <td className="py-4 px-6 text-gray-500 font-medium">{data.id_alat}</td>
                       <td className="py-4 px-6 text-center">
                         <span className={`px-3 py-1.5 rounded-md text-white text-[11px] font-bold tracking-wider uppercase shadow-sm
-                          ${data.status === 'Normal' ? 'bg-[#8CA70A]' : 
-                            data.status === 'Siaga' ? 'bg-[#DF6F3B]' : 
-                            data.status === 'Waspada' ? 'bg-[#EEB627]' : 'bg-[#FF1100]'}`}>
+                          ${data.status === 'NORMAL' ? 'bg-[#8CA70A]' : 
+                            data.status === 'WASPADA' ? 'bg-[#EEB627]' : 
+                            data.status === 'SIAGA' ? 'bg-[#DF6F3B]' : 'bg-[#FF1100]'}`}>
                           {data.status}
                         </span>
                       </td>
