@@ -10,11 +10,12 @@ export default function Weather(){
 
     const lat = -7.194080;
     const lon = 107.273049;
+    const elevation = 2150;
 
     useEffect(() => {
         const fetchWeather = async () => {
             try {
-                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relativehumidity_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`);
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&elevation=${elevation}&hourly=temperature_2m,relativehumidity_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`);
                 const data = await res.json();
                 setWeatherData(data);
 
@@ -47,21 +48,25 @@ export default function Weather(){
     
     const selectedHourlyData = getHourlyData();
     function getWeatherCategory(code) {
-        if (code >= 0 && code <= 10) return "Cerah";
-        if (code >= 11 && code <= 50) return "Berawan";
-        if (code >= 51 && code <= 62) return "Hujan Ringan";
-        if (code >= 63 && code <= 72) return "Hujan Sedang";
-        if (code >= 73 && code <= 83) return "Hujan deras";
-        if (code >= 84) return "Badai Petir";
-        return "Tidak diketahui";
+        if (code === 0) return "Cerah";
+        if (code === 1 || code === 2) return "Cerah Berawan";
+        if (code === 3) return "Mendung";
+        if (code === 45 || code === 48) return "Berkabut";
+        if (code >= 51 && code <= 57) return "Gerimis"; 
+        if (code === 61 || code === 66 || code === 80) return "Hujan Ringan";
+        if (code === 63 || code === 81) return "Hujan Sedang";
+        if (code === 65 || code === 67 || code === 82) return "Hujan Deras";
+        if (code >= 71 && code <= 86) return "Hujan Es / Dingin"; 
+        if (code >= 95 && code <= 99) return "Badai Petir";
+        return "Tidak Diketahui";
     }
 
     function getWeatherIcon(code) {
-        if (code >= 0 && code <= 10) return "/icon/Sun.svg";
-        if (code >= 11 && code <= 49) return "/icon/Cloud.svg";
-        if (code >= 50 && code <= 80) return "/icon/CloudRain.svg";
-        if (code >= 81) return "/icon/CloudLightning.svg";
-        return "Tidak diketahui";
+        if (code === 0) return "/icon/Sun.svg";
+        if ((code >= 1 && code <= 3) || code === 45 || code === 48) return "/icon/Cloud.svg";
+        if (code >= 51 && code <= 86) return "/icon/CloudRain.svg";
+        if (code >= 95 && code <= 99) return "/icon/CloudLightning.svg";
+        return "/icon/Sun.svg";
     }
 
     return (
