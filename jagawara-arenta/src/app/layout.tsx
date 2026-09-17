@@ -13,8 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jagawara Arenta",
-  description: "Created by Team PPKO IAAS LC UNPAD",
+  title: 'Jagawara Arenta | Siaga Jagaren | Dashboard EWS',
+  description: 'Sistem peringatan dini mitigasi bencana longsor berbasis Internet of Things (IoT) di Desa Cipelah. Diinisiasi oleh tim PPK Ormawa IAAS LC UNPAD. Lembaga Jagaren bersama warga Desa Cipelah.',
+  keywords: ['EWS Cipelah', 'PPK Ormawa IAAS LC UNPAD', 'Jagawara Arenta', 'Jagaren', 'Mitigasi Bencana', 'IoT Cipelah', 'Sensor Longsor'],
 };
 
 export default function RootLayout({
