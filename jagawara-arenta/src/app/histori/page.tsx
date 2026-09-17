@@ -9,7 +9,7 @@ interface Berita {
     galeri_foto: string[];
 }
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export default async function HistoriBencanaPage() {
   const dataBerita: Berita[] = await client.fetch(`
