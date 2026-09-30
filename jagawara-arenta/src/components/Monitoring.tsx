@@ -40,6 +40,7 @@ export default function Monitoring(){
 
     const [sensorData, setSensorData] = useState<SensorData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    
     useEffect(() => {
         const fetchLiveSensor = async () => {
             try {
@@ -50,7 +51,7 @@ export default function Monitoring(){
                     setSensorData(result.data);
                 }
             } catch(error){
-                console.error("Gagal menarik  data live sensor:", error)
+                console.error("Gagal menarik data live sensor:", error)
             } finally {
                 setIsLoading(false);
             }
@@ -78,75 +79,136 @@ export default function Monitoring(){
                     </div>
                     <div className="flex items-center gap-2 px-3 py-1 bg-green-50 border border-green-100 rounded-full">
                         <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                        <span className="text-[10px] font bold text-green-600 uppercase tracking wider">Live Update</span>
+                        <span className="text-[10px] font-bold text-green-600 uppercase tracking-wider">Live Update</span>
                     </div>
                 </div>
                 
-                <div className="p-4 overflow-x-auto">
-                    <table className="w-full text-sm text-left whitespace-nowrap">
-                        <thead className="text-[14px] text-[#936440] border-b-2 border-[#936440]/20 bg-orange-50/30">
-                            <tr>
-                                <th className="py-4 px-4 font-bold">Titik</th>
-                                <th className="py-4 px-4 font-bold">ID</th>
-                                <th className="py-4 px-4 font-bold text-center">Status</th>
-                                <th className="py-4 px-4 font-bold">Baterai</th>
-                                <th className="py-4 px-4 font-bold">Status Baterai</th>
-                                <th className="py-4 px-4 font-bold">Curah Hujan</th>
-                                <th className="py-4 px-4 font-bold">Kelembapan Tanah</th>
-                                <th className="py-4 px-4 font-bold">Kemiringan</th>
-                                <th className="py-4 px-4 font-bold">Getaran</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-[#936440]/10">
-                            {isLoading ?  (
+                <div className="p-4 bg-white">
+                    <div className="hidden md:block overflow-x-auto">
+                        <table className="w-full text-sm text-left whitespace-nowrap">
+                            <thead className="text-[14px] text-[#936440] border-b-2 border-[#936440]/20 bg-orange-50/30">
                                 <tr>
-                                    <td colSpan={9} className="py-8 text-center text-[#936440] font-semibold animate-pulse">
-                                        Menarik data langsung dari lereng...
-                                    </td>
+                                    <th className="py-4 px-4 font-bold">Titik</th>
+                                    <th className="py-4 px-4 font-bold">ID</th>
+                                    <th className="py-4 px-4 font-bold text-center">Status</th>
+                                    <th className="py-4 px-4 font-bold">Baterai</th>
+                                    <th className="py-4 px-4 font-bold">Status Baterai</th>
+                                    <th className="py-4 px-4 font-bold">Curah Hujan</th>
+                                    <th className="py-4 px-4 font-bold">Kelembapan Tanah</th>
+                                    <th className="py-4 px-4 font-bold">Kemiringan</th>
+                                    <th className="py-4 px-4 font-bold">Getaran</th>
                                 </tr>
-                            ) : sensorData.length === 0 ? (
-                                <tr>
-                                    <td colSpan={9} className="py-8 text-center text-gray-500 font-semibold">
-                                        Belum ada data sensor yang masuk.
-                                    </td>
-                                </tr>
-                            ) : (
-                                sensorData.map((data, index) => (
-                                <tr key={index} onClick={() => handleKlikBaris(data.lat, data.lng)} className="hover:bg-orange-100/60 transition-colors cursor-pointer">
-                                    <td className="py-4 px-4 font-bold text-[#0B592F]">{data.station}</td>
-                                    <td className="py-4 px-4 text-gray-500 font-medium">{data.id}</td>
-                                    <td className="py-4 px-4 text-center">
-                                        <span className={`px-3 py-1 rounded-full text-white text-[11px] font-bold tracking-wider uppercase ${data.statusColor}`}>
+                            </thead>
+                            <tbody className="divide-y divide-[#936440]/10">
+                                {isLoading ?  (
+                                    <tr>
+                                        <td colSpan={9} className="py-8 text-center text-[#936440] font-semibold animate-pulse">Menarik data langsung dari lereng...</td>
+                                    </tr>
+                                ) : sensorData.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={9} className="py-8 text-center text-gray-500 font-semibold">Belum ada data sensor yang masuk.</td>
+                                    </tr>
+                                ) : (
+                                    sensorData.map((data, index) => (
+                                    <tr key={index} onClick={() => handleKlikBaris(data.lat, data.lng)} className="hover:bg-orange-100/60 transition-colors cursor-pointer">
+                                        <td className="py-4 px-4 font-bold text-[#0B592F]">{data.station}</td>
+                                        <td className="py-4 px-4 text-gray-500 font-medium">{data.id}</td>
+                                        <td className="py-4 px-4 text-center">
+                                            <span className={`px-3 py-1 rounded-full text-white text-[11px] font-bold tracking-wider uppercase ${data.statusColor}`}>{data.status}</span>
+                                        </td>
+
+                                        {data.kategori === 'EWS' ? (
+                                            <>
+                                                <td className="py-4 px-4 min-w-[120px]">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-full bg-gray-200 rounded-full h-2">
+                                                            <div className={`h-2 rounded-full ${data.battery > 50 ? 'bg-[#8CA70A]' : 'bg-red-500'}`} style={{ width: `${data.battery}%` }}></div>
+                                                        </div>
+                                                        <span className="text-xs font-bold text-gray-700 w-8">{data.battery}%</span>
+                                                    </div>
+                                                </td>
+                                                <td className="py-4 px-4 font-bold text-[#936440]">{data.batteryStatus}</td>
+                                                <td className="py-4 px-4 font-semibold text-gray-700">{data.curah_hujan} mm/jam</td>
+                                                <td className="py-4 px-4 font-bold text-[#DF6F3B]">{data.kelembapan}%</td>
+                                                <td className="py-4 px-4 font-semibold text-gray-700">{data.kemiringan} °</td>
+                                                <td className="py-4 px-4 font-semibold text-gray-700">{data.getaran} g</td>
+                                            </>
+                                        ) : (
+                                            <td colSpan={6} className="py-4 px-4 text-center text-gray-400 font-semibold italic bg-gray-50/50">Fasilitas Umum</td>
+                                        )}
+                                    </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div className="block md:hidden space-y-4 pt-4">
+                        {isLoading ? (
+                            <div className="py-8 text-center text-[#936440] font-semibold animate-pulse border border-[#936440]/20 rounded-xl">
+                                Menarik data langsung dari lereng...
+                            </div>
+                        ) : sensorData.length === 0 ? (
+                            <div className="py-8 text-center text-gray-500 font-semibold border border-gray-200 rounded-xl">
+                                Belum ada data sensor yang masuk.
+                            </div>
+                        ) : (
+                            sensorData.map((data, index) => (
+                                <div key={index} onClick={() => handleKlikBaris(data.lat, data.lng)} className="flex flex-col bg-white border border-[#936440]/20 rounded-xl p-4 shadow-sm hover:shadow-md transition-all cursor-pointer active:scale-[0.98]">
+                                    <div className="flex justify-between items-start mb-3">
+                                        <div>
+                                            <h3 className="font-bold text-[#0B592F] text-lg leading-tight">{data.station}</h3>
+                                            <p className="text-xs text-gray-500 font-medium mt-0.5">ID: {data.id}</p>
+                                        </div>
+                                        <span className={`px-3 py-1 rounded-full text-white text-[10px] font-bold tracking-wider uppercase ${data.statusColor}`}>
                                             {data.status}
                                         </span>
-                                    </td>
+                                    </div>
 
                                     {data.kategori === 'EWS' ? (
                                         <>
-                                            <td className="py-4 px-4 min-w-[120px]">
-                                                <div className="flex items-center gap-2">
-                                                    <div className="w-full bg-gray-200 rounded-full h-2">
+                                            <div className="grid grid-cols-2 gap-3 mb-4">
+                                                <div className="bg-orange-50/50 p-2 rounded-lg border border-orange-100">
+                                                    <p className="text-[#936440] text-[10px] font-bold uppercase tracking-wider">Curah Hujan</p>
+                                                    <p className="font-semibold text-gray-800 text-sm mt-0.5">{data.curah_hujan} <span className="text-[10px] text-gray-500">mm/jam</span></p>
+                                                </div>
+                                                <div className="bg-orange-50/50 p-2 rounded-lg border border-orange-100">
+                                                    <p className="text-[#936440] text-[10px] font-bold uppercase tracking-wider">Kelembapan</p>
+                                                    <p className="font-bold text-[#DF6F3B] text-sm mt-0.5">{data.kelembapan}%</p>
+                                                </div>
+                                                <div className="bg-orange-50/50 p-2 rounded-lg border border-orange-100">
+                                                    <p className="text-[#936440] text-[10px] font-bold uppercase tracking-wider">Kemiringan</p>
+                                                    <p className="font-semibold text-gray-800 text-sm mt-0.5">{data.kemiringan} °</p>
+                                                </div>
+                                                <div className="bg-orange-50/50 p-2 rounded-lg border border-orange-100">
+                                                    <p className="text-[#936440] text-[10px] font-bold uppercase tracking-wider">Getaran</p>
+                                                    <p className="font-semibold text-gray-800 text-sm mt-0.5">{data.getaran} g</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center justify-between border-t border-[#936440]/10 pt-3">
+                                                <div className="flex flex-col">
+                                                    <span className="text-[#936440] text-[10px] font-bold uppercase tracking-wider">Daya Baterai</span>
+                                                    <span className="text-xs font-bold text-gray-700">{data.batteryStatus}</span>
+                                                </div>
+                                                <div className="flex items-center gap-2 w-1/2 justify-end">
+                                                    <div className="w-full max-w-[80px] bg-gray-200 rounded-full h-2">
                                                         <div className={`h-2 rounded-full ${data.battery > 50 ? 'bg-[#8CA70A]' : 'bg-red-500'}`} style={{ width: `${data.battery}%` }}></div>
                                                     </div>
-                                                    <span className="text-xs font-bold text-gray-700 w-8">{data.battery}%</span>
+                                                    <span className="text-xs font-bold text-gray-700">{data.battery}%</span>
                                                 </div>
-                                            </td>
-                                            <td className="py-4 px-4 font-bold text-[#936440]">{data.batteryStatus}</td>
-                                            <td className="py-4 px-4 font-semibold text-gray-700">{data.curah_hujan} mm/jam</td>
-                                            <td className="py-4 px-4 font-bold text-[#DF6F3B]">{data.kelembapan}%</td>
-                                            <td className="py-4 px-4 font-semibold text-gray-700">{data.kemiringan} °</td>
-                                            <td className="py-4 px-4 font-semibold text-gray-700">{data.getaran} g</td>
+                                            </div>
                                         </>
                                     ) : (
-                                        <td colSpan={6} className="py-4 px-4 text-center text-gray-400 font-semibold italic bg-gray-50/50">
+                                        <div className="py-4 text-center text-gray-400 font-semibold italic bg-gray-50/50 rounded-lg border border-gray-100">
                                             Fasilitas Statis (Tanpa Sensor)
-                                        </td>
+                                        </div>
                                     )}
-                                </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
+                                </div>
+                            ))
+                        )}
+                    </div>
+
                 </div>
             </div>
 
