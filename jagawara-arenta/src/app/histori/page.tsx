@@ -1,5 +1,6 @@
 import { client } from '@/src/sanity/lib/client';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface Berita {
     _id: string;
@@ -25,6 +26,13 @@ export default async function HistoriBencanaPage() {
   return (
     <div className="min-h-screen bg-[#f4f1ea] p-8 font-sans">
       <div className="max-w-4xl mx-auto">
+        <Link href="/" className="inline-flex items-center gap-2 px-4 py-2 mb-6 text-[#936440] bg-white border border-[#936440]/20 rounded-lg shadow-sm hover:bg-[#936440] hover:text-white transition-all font-bold text-sm group w-fit">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Kembali ke Dashboard
+        </Link>
+
         <h1 className="text-4xl font-black text-[#0B592F] py-2">Histori Bencana</h1>
         <p className="text-[#936440]">Catatan kejadian pergerakan tanah dan longsor di area pantauan.</p>
 
